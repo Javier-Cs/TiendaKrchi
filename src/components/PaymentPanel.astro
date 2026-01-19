@@ -1,0 +1,21 @@
+---
+// 1. Frontmatter: Define las props que acepta el componente
+const { titulo, contenido } = Astro.props;
+---
+<div class="payment">
+  <div class="logo">LOGO</div>
+
+  <label>Fecha de pago <input type="date" /></label>
+  <label>Cliente <input type="text" /></label>
+  <label>Total ventas <input type="text" /></label>
+  <label>Efectivo dado <input type="number" /></label>
+  <label>Monto <input type="text" /></label>
+  <label>Vuelto <input type="text" /></label>
+
+  <div class="total">
+    Total a pagar: $
+    <label for="d">80.00</label>
+  </div>
+
+  <button class="btn pay">PAGAR</button>
+</div>

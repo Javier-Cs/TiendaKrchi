@@ -1,0 +1,66 @@
+---
+interface Column<T = any> {
+  label: string;
+  field?: keyof T;
+  render?: (row: T) => string | number;
+}
+
+interface Props<T = any> {
+  columns: Column<T>[];
+  rows: T[];
+  keyField?: keyof T;
+  selectable?: boolean;
+}
+
+const {
+  columns = [],
+  rows = [],
+  keyField = 'id',
+  selectable = false
+} = Astro.props as Props;
+---
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        {selectable && <th></th>}
+        {columns.map(col => (
+          <th>{col.label}</th>
+        ))}
+      </tr>
+    </thead>
+
+    <tbody>
+  {Array.isArray(rows) && rows.length > 0 ? (
+    rows.map(row => (
+      <tr class="table-row"
+          data-id={row[keyField]}>
+            
+        {selectable && (
+          <td>
+            <input type="checkbox" value={row[keyField]} />
+          </td>
+        )}
+
+        {columns.map(col => (
+          <td>
+            {col.render
+              ? col.render(row)
+              : col.field
+              ? row[col.field]
+              : ''}
+          </td>
+        ))}
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colspan={columns.length + (selectable ? 1 : 0)}>
+        Sin datos
+      </td>
+    </tr>
+  )}
+</tbody>
+  </table>
+</div>

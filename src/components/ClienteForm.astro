@@ -1,0 +1,111 @@
+---
+---
+<div class="form">
+  <div class="form-grid">
+    <label>
+      Nombre Cliente:
+      <input id="nombreCliente" type="text" />
+    </label>
+
+    <label>
+      Teléfono Cliente:
+      <input id="telefono" type="text" />
+    </label>
+
+    <label>
+      Correo Cliente:
+      <input id="email" type="email" />
+    </label>
+
+    <label>
+      Estado del cliente
+      <select id="estadoCliente">
+        <option value="true">Activo</option>
+        <option value="false">Inactivo</option>
+      </select>
+    </label>
+
+    <label>
+      Tipo de cliente
+      <select id="tipoCliente">
+        <option value="normal">Normal</option>
+        <option value="deudor">Deudor</option>
+      </select>
+    </label>
+
+    <label>
+      Fecha creación
+      <input id="fecha" type="date" />
+    </label>
+
+    <div class="actions-left">
+      <button id="btn-cancelarCliente" type="button" class="btn cancel">
+        CANCELAR
+      </button>
+      <button id="btn-guardarCliente" type="button" class="btn save">
+        GUARDAR
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  const guardarCliente = document.getElementById('btn-guardarCliente');
+  const cancelarCliente = document.getElementById('btn-cancelarCliente');
+
+  guardarCliente.addEventListener('click', async () => {
+
+    const fechaInput = document.getElementById('fecha').value;
+
+    const payload = {
+      nombre: document.getElementById('nombreCliente').value.trim(),
+      telefono: document.getElementById('telefono').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      tipo: document.getElementById('tipoCliente').value,
+      estado: document.getElementById('estadoCliente').value === 'true',
+      fecha_creacion: fechaInput
+        ? new Date(fechaInput).toISOString()
+        : new Date().toISOString()
+    };
+
+    if (!payload.nombre) {
+      alert('El nombre del cliente es obligatorio');
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        'https://apioper.legumfrutsa.com/Api/Clientes',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }
+      );
+
+      const text = await res.text();
+      if (!res.ok) throw new Error(text);
+
+      alert('Cliente registrado correctamente');
+      limpiarFormulario();
+
+      // 🔔 notificar a la tabla
+      window.dispatchEvent(new CustomEvent('cliente-creado'));
+
+    } catch (err) {
+      console.error(err);
+      alert('No se pudo registrar el cliente');
+    }
+  });
+
+  cancelarCliente.addEventListener('click', limpiarFormulario);
+
+  function limpiarFormulario() {
+    document.querySelectorAll('.form-grid input').forEach(el => el.value = '');
+    document.querySelectorAll('.form-grid select').forEach(el => el.selectedIndex = 0);
+  }
+
+});
+</script>

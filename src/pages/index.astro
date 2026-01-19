@@ -1,11 +1,124 @@
 ---
-import Welcome from '../components/Welcome.astro';
+import PaymentPanel from '../components/PaymentPanel.astro';
+import SalesForm from '../components/SalesForm.astro';
+import SalesTable from '../components/SalesTable.astro';
+import ClienteForm from '../components/ClienteForm.astro';
+import PagosView from '../components/PagosView.astro';			
 import Layout from '../layouts/Layout.astro';
+import Tabs from '../components/Tabs.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+type VentaDto = {
+  id_venta: number;
+  id_cliente: number;
+  nombre_vendedor: string;
+  tipo_venta: string;
+  estado_venta: string;
+  monto_total_Venta: number;
+  fecha_venta: string;
+};
+
+type ClienteDto = {
+  id_cliente: number;
+  nombre: string;
+  tipo: string;
+  estado: boolean;
+  fecha_creacion: string;
+};
+
+
+
+type Column<T> = {
+  label: string;
+  field?: keyof T;
+  render?: (row: T) => string;
+};
+
+const ventas: VentaDto[] = await fetch(
+  'https://apioper.legumfrutsa.com/Api/Ventas/clientes'
+).then(r => r.json());
+const columnasVentas: Column<VentaDto>[] = [
+  { label: 'ID Venta', field: 'id_venta' },
+  { label: 'ID Cliente', field: 'id_cliente' },
+  { label: 'Vendedor', field: 'nombre_vendedor' },
+  { label: 'Tipo', field: 'tipo_venta' },
+  { label: 'Estado', field: 'estado_venta' },
+  {
+    label: 'Total',
+    field: 'monto_total_Venta',
+    render: (v) => `$${v.monto_total_Venta.toFixed(2)}`
+  },
+  {
+    label: 'Fecha',
+    field: 'fecha_venta',
+    render: (v) => new Date(v.fecha_venta).toLocaleDateString()
+  }
+];
+
+
+
+
+const clientes: ClienteDto[] = await fetch(
+  'https://apioper.legumfrutsa.com/Api/Clientes'
+).then(r => r.json());
+
+const columnasClientes: Column<ClienteDto>[] = [
+  { label: 'ID', field: 'id_cliente' },
+  { label: 'Nombre', field: 'nombre' },
+  { label: 'Tipo', field: 'tipo' },
+  {
+    label: 'Estado',
+    render: (c) => c.estado ? 'Activo' : 'Inactivo'
+  },
+  {
+    label: 'Fecha',
+    field: 'fecha_creacion',
+    render: (c) => new Date(c.fecha_creacion).toLocaleDateString()
+  }
+];
+
 ---
 
 <Layout>
-	<Welcome />
+
+	<header class="header">
+    	<span>Hora: 10:30:24</span>
+	</header>
+	<main class="layout">
+		<section class="left">
+			<Tabs/>
+			<section>
+				<div data-tab="vender" class="tab-panel active">
+					<SalesForm/>
+					<div>
+						<SalesTable
+							columns={columnasVentas}
+  							rows={ventas}
+  							keyField="id_venta"
+						/>
+					</div>
+				</div>
+
+				<div data-tab="cliente" class="tab-panel">
+					<ClienteForm/>
+					<div>
+						<SalesTable
+							columns={columnasClientes}
+  							rows={clientes}
+  							keyField="id_cliente"
+						/>
+					</div>
+				</div >
+				
+				<div data-tab="pagos" class="tab-panel">
+					<PagosView/>
+					
+				</div>
+			</section>
+			
+		</section>
+		
+		<aside class="right">
+			<PaymentPanel/>
+		</aside>
+	</main>
 </Layout>

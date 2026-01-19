@@ -1,0 +1,127 @@
+---
+
+---
+<div class="form">
+  <div class="form-grid">
+    <label>
+      Vendedor
+      <select id="vendedor">
+        <option value="Maximo">Maximo</option>
+        <option value="Jhon">Jhon</option>
+        <option value="Escarlet">Escarlet</option>
+        <option value="Jean">Jean</option>
+
+      </select>
+    </label>
+
+    <label>
+      Estado venta
+      <select id="estado">
+        <option value="Pagado">Pagado</option>
+        <option value="Deuda">Deuda</option>
+
+      </select>
+    </label>
+
+    <label>
+      Buscar cliente
+      <input id="idcliente" type="number" />
+    </label>
+
+    <label class="full">
+      Descripción venta
+      <textarea id="descripcion"></textarea>
+    </label>
+
+    <label>
+      Tipo venta
+      <select id="tipoVenta">
+        <option value="Contado">Contado</option>
+        <option value="Credito">Crédito</option>
+      </select>
+    </label>
+
+    <label>
+      Monto total venta
+      <input id="monto" type="number" step="0.01" />
+    </label>
+
+    <label>
+      Fecha venta
+      <input id="fecha" type="date" />
+    </label>
+
+    <label>
+      Efectivo recibido
+      <input id="efectivo" type="number" step="0.01" />
+    </label>
+
+    <div class="actions-left">
+      <button id="btn-limpiarVenta" class="btn limpiar">Limpiar</button>
+      <button id="btn-cancelarVenta" class="btn cancel">CANCELAR</button>
+      <button id="btn-guardarVenta" class="btn save">REGISTRAR VENTA</button>
+    </div>
+
+    <label class="vuelto">
+      Vuelto
+      <input id="vuelto" type="number" disabled />
+    </label>
+  </div>
+</div>
+
+<script>
+  const idcliente = document.getElementById('idcliente');
+  const monto = document.getElementById('monto');
+  const efectivo = document.getElementById('efectivo');
+  const vuelto = document.getElementById('vuelto');
+  const guardarVenta = document.getElementById('btn-guardarVenta');
+
+  function calcularVuelto() {
+    const m = Number(monto.value) || 0;
+    const e = Number(efectivo.value) || 0;
+    vuelto.value = (e - m).toFixed(2);
+  }
+
+  monto.addEventListener('input', calcularVuelto);
+  efectivo.addEventListener('input', calcularVuelto);
+
+  guardarVenta.addEventListener('click', async () => {
+    const payload = {
+      nombre_vendedor: document.getElementById('vendedor').value,
+      id_cliente: Number(idcliente.value),
+      descripcion_venta: document.getElementById('descripcion').value,
+      tipo_venta: document.getElementById('tipoVenta').value,
+      estado_venta: document.getElementById('estado').value,
+      efectivo_recibido: Number(efectivo.value),
+      monto_total_Venta: Number(monto.value),
+      monto_vuelto: Number(vuelto.value),
+      fecha_venta: new Date().toISOString()
+    };
+
+    if (payload.efectivo_recibido < payload.monto_total_Venta) {
+      alert('Efectivo insuficiente');
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        'https://apioper.legumfrutsa.com/Api/Ventas',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }
+      );
+
+      if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error);
+      }
+
+      alert('Venta registrada correctamente');
+    } catch (err) {
+      console.error(err);
+      alert('Error al registrar la venta');
+    }
+  });
+</script>

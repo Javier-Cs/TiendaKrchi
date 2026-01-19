@@ -1,0 +1,236 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  background: #e6e6e6;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #ececec;
+}
+
+.header {
+  height: 40px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 1rem;
+  background: #e6e6e6;
+  font-size: 14px;
+}
+
+.layout {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+
+  height: calc(100vh - 40px);
+  box-sizing: border-box;
+}
+
+.left {
+  flex: 3;
+  background: #1ea6d9;
+  border-radius: 10px;
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.right {
+  flex: 1;
+  background: #2aa3d6;
+  border-radius: 10px;
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  
+}
+
+.tabs {
+  display: flex;
+  gap: .5rem;
+}
+
+.tab {
+  padding: .5rem 1rem;
+  border: none;
+  background: #ccc;
+  cursor: pointer;
+}
+
+.tab.active {
+  background: #fff;
+  font-weight: bold;
+}
+
+.form {
+  background: #d6d28a;
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 6px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .5rem;
+}
+
+.form-grid .full {
+  grid-column: span 1;
+}
+.form-grid label:nth-child(4) {
+  grid-row: span 3; /* descripción más alta */
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  gap: .25rem;
+}
+
+.form input,
+.form select,
+.form textarea {
+  height: 28px;
+  padding: 0 .5rem;
+  border-radius: 4px;
+  border: 1px solid #999;
+  font-size: 13px;
+}
+
+.form textarea {
+  height: 70px;
+  resize: none;
+}
+
+.table-wrapper {
+  flex: 1;              /*  CLAVE */
+  overflow: auto;
+  margin-top: 1rem;
+  background: #d6d28a;
+  border-radius: 8px;
+  padding: .5rem;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #999;
+  padding: .25rem;
+  text-align: center;
+}
+
+.payment {
+  background: #d6d28a;
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  
+}
+.form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.form-actions .btn {
+  padding: .5rem 1.5rem;
+  border-radius: 20px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.form-actions .cancel {
+  background: #eee;
+}
+
+.form-actions .save {
+  background: #fff;
+}
+
+.logo {
+  height: 80px;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn {
+  padding: .5rem;
+  cursor: pointer;
+}
+
+.pay {
+  background: #fff;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.actions-left {
+  grid-column: 2 / 3;       /* columna central */
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+}
+.actions-left .btn {
+  padding: .5rem 1.5rem;
+  border-radius: 20px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+/* Campo vuelto a la derecha */
+.vuelto {
+  grid-column: 3 / 4;       /* columna derecha */
+  display: flex;
+  flex-direction: column;
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+.table-row {
+  cursor: pointer;
+}
+
+.table-row:hover {
+  background: rgba(234, 39, 59, 0.707);
+}
+.table-wrapper {
+  flex: 1;                 /* ocupa el espacio restante del panel */
+  max-height: 290px;       /* AJUSTA según tu diseño */
+  overflow-y: auto;        /* scroll vertical */
+  overflow-x: hidden;
+
+  background: #d6d28a;
+  border-radius: 8px;
+  padding: .5rem;
+}
