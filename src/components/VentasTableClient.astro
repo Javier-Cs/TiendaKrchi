@@ -1,0 +1,45 @@
+---
+import SalesTable from './SalesTable.astro';
+
+const { clienteId = 1 } = Astro.props;
+---
+
+<div id="ventas-table">
+  <SalesTable
+    columns={[
+      { label: 'ID Venta', field: 'id_venta' },
+      { label: 'ID Cliente', field: 'id_cliente' },
+      { label: 'Vendedor', field: 'nombre_vendedor' },
+      { label: 'Tipo', field: 'tipo_venta' },
+      { label: 'Estado', field: 'estado_venta' },
+      {
+        label: 'Total',
+        render: v => `$${Number(v.monto_total_Venta).toFixed(2)}`
+      },
+      {
+        label: 'Fecha',
+        render: v => new Date(v.fecha_venta).toLocaleDateString()
+      }
+    ]}
+    rows={[]}
+    keyField="id_venta"
+  />
+</div>
+
+<script client:load>
+  let ventas = [];
+
+  async function cargarVentas() {
+    const res = await fetch(
+      `https://apioperaciones.legumfrutsa.com/Api/Ventas/cliente/${clienteId}`
+    );
+    ventas = await res.json();
+
+    const event = new CustomEvent('ventas-actualizadas', { detail: ventas });
+    window.dispatchEvent(event);
+  }
+
+  window.addEventListener('venta-creada', cargarVentas);
+
+  cargarVentas();
+</script>

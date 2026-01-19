@@ -1,0 +1,31 @@
+---
+
+---
+<div class="tabs">
+  <button class="tab active" data-tab="vender">VENDER</button>
+  <button class="tab" data-tab="cliente">CLIENTE</button>
+  <button class="tab" data-tab="pagos">PAGOS</button>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.tab-panel');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+
+      // activar tab
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      // mostrar panel
+      panels.forEach(panel => {
+        panel.classList.toggle(
+          'active',
+          panel.dataset.tab === target
+        );
+      });
+    });
+  });
+</script>
