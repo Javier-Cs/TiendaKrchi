@@ -10,27 +10,55 @@
 
     <label>
       Estado venta
-      <select>
-        <option>Pagado</option>
-        <option>Deuda</option>
-
+      <select id="estado">
+        <option value="PAGADO">Pagado</option>
+        <option value="DEUDA">Deuda</option>
       </select>
     </label>
 
 
     <label>
       Tipo venta
-      <select>
-        <option>Normal</option>
-        <option>Credito</option>
-
+      <select id="tipoVenta">
+        <option value="CONTADO">Contado</option>
+        <option value="CREDITO">Crédito</option>
       </select>
     </label>
 
     
 
     <div class="actions-left">
-    <button class="btn cancel">CANCELAR</button>
-    <button class="btn save">GUARDAR</button>
+    <button id="btn-cancelar" class="btn cancel">CANCELAR</button>
+    <button id="btn-buscar" class="btn buscar">BUSCAR DEUDA</button>
     </div>
 </div>
+<script>
+  const idcliente = document.getElementById('idcliente') as HTMLInputElement;
+  const estado = document.getElementById('estado') as HTMLSelectElement;
+  const tipoVenta = document.getElementById('tipoVenta') as HTMLSelectElement;
+  const btnBuscarDeuda = document.getElementById('btn-buscar') as HTMLButtonElement;
+  const btnCancelar = document.getElementById('btn-cancelar') as HTMLButtonElement;
+
+  btnBuscarDeuda.addEventListener('click', async (e) =>{
+
+    e.preventDefault();
+    const payload = {
+      id_cliente: Number(idcliente.value),
+      estado_venta: estado.value,
+      tipo_venta: tipoVenta.value
+    }
+    try {
+      const res = await fetch(`https://localhost:44313/Api/Venta/cliente/${idcliente.value}/estado/${estado.value}/tipo/${tipoVenta.value}`);
+      const data = await res.json();
+      window.dispatchEvent(new CustomEvent('ventas-filtradas', {detail: data}));
+
+    } catch (error) {
+
+      
+    }
+
+  });
+
+
+
+</script>

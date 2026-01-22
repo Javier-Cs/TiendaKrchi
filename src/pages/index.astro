@@ -3,9 +3,11 @@ import PaymentPanel from '../components/PaymentPanel.astro';
 import SalesForm from '../components/SalesForm.astro';
 import SalesTable from '../components/SalesTable.astro';
 import ClienteForm from '../components/ClienteForm.astro';
-import PagosView from '../components/PagosView.astro';			
+import PagosView from '../components/PagosView.astro';
 import Layout from '../layouts/Layout.astro';
 import Tabs from '../components/Tabs.astro';
+import "../styles/main.css";
+import VentasTableClient from '../components/VentasTableClient.astro';
 
 type VentaDto = {
   id_venta: number;
@@ -26,16 +28,13 @@ type ClienteDto = {
 };
 
 
-
 type Column<T> = {
   label: string;
   field?: keyof T;
   render?: (row: T) => string;
 };
 
-const ventas: VentaDto[] = await fetch(
-  'https://apioper.legumfrutsa.com/Api/Ventas/clientes'
-).then(r => r.json());
+// ventas table columns
 const columnasVentas: Column<VentaDto>[] = [
   { label: 'ID Venta', field: 'id_venta' },
   { label: 'ID Cliente', field: 'id_cliente' },
@@ -43,24 +42,26 @@ const columnasVentas: Column<VentaDto>[] = [
   { label: 'Tipo', field: 'tipo_venta' },
   { label: 'Estado', field: 'estado_venta' },
   {
+    label: 'Fecha',
+    field: 'fecha_venta',
+    render: (v) => new Date(v.fecha_venta).toLocaleString('es-EC', {
+  timeZone: 'America/Guayaquil',
+  hour: '2-digit',
+  minute: '2-digit',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit'
+})
+  },
+  {
     label: 'Total',
     field: 'monto_total_Venta',
     render: (v) => `$${v.monto_total_Venta.toFixed(2)}`
-  },
-  {
-    label: 'Fecha',
-    field: 'fecha_venta',
-    render: (v) => new Date(v.fecha_venta).toLocaleDateString()
   }
 ];
 
 
-
-
-const clientes: ClienteDto[] = await fetch(
-  'https://apioper.legumfrutsa.com/Api/Clientes'
-).then(r => r.json());
-
+// clientes table columns
 const columnasClientes: Column<ClienteDto>[] = [
   { label: 'ID', field: 'id_cliente' },
   { label: 'Nombre', field: 'nombre' },
@@ -72,16 +73,57 @@ const columnasClientes: Column<ClienteDto>[] = [
   {
     label: 'Fecha',
     field: 'fecha_creacion',
-    render: (c) => new Date(c.fecha_creacion).toLocaleDateString()
+    render: (c) => new Date(c.fecha_creacion).toLocaleString('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
   }
 ];
+
+// Deudas table columns
+const columnasDeudas: Column<VentaDto>[] = [
+  //{ label: 'Selec T.', field: 'id_venta' },
+  { label: 'ID Venta', field: 'id_venta' },
+  { label: 'ID Cliente', field: 'id_cliente' },
+  { label: 'Vendedor', field: 'nombre_vendedor' },
+  { label: 'Tipo', field: 'tipo_venta' },
+  { label: 'Estado', field: 'estado_venta' },
+  {
+    label: 'Fecha',
+    field: 'fecha_venta',
+    render: (v) => new Date(v.fecha_venta).toLocaleString('es-EC', {
+  timeZone: 'America/Guayaquil',
+  hour: '2-digit',
+  minute: '2-digit',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit'
+})
+  },
+  {
+    label: 'Total',
+    field: 'monto_total_Venta',
+    render: (v) => `$${v.monto_total_Venta.toFixed(2)}`
+  }
+];
+
 
 ---
 
 <Layout>
 
 	<header class="header">
-    	<span>Hora: 10:30:24</span>
+    	<div class="header-left">
+        <img src="logo.png" alt="Logo" class="logo" />
+        <span class="app-title">Sistema de Ventas</span>
+      </div>
+    
+      <div class="header-right">
+        <span id="reloj">--:--:--</span>
+      </div>
 	</header>
 	<main class="layout">
 		<section class="left">
@@ -92,7 +134,7 @@ const columnasClientes: Column<ClienteDto>[] = [
 					<div>
 						<SalesTable
 							columns={columnasVentas}
-  							rows={ventas}
+  							rows={[]}
   							keyField="id_venta"
 						/>
 					</div>
@@ -103,7 +145,7 @@ const columnasClientes: Column<ClienteDto>[] = [
 					<div>
 						<SalesTable
 							columns={columnasClientes}
-  							rows={clientes}
+  							rows={[]}
   							keyField="id_cliente"
 						/>
 					</div>
@@ -111,6 +153,14 @@ const columnasClientes: Column<ClienteDto>[] = [
 				
 				<div data-tab="pagos" class="tab-panel">
 					<PagosView/>
+          <div>
+            <VentasTableClient
+              columns={columnasDeudas}
+              rows={[]}
+              keyField="id_venta"
+              selectable={true}
+            />
+          </div>
 					
 				</div>
 			</section>
@@ -122,3 +172,163 @@ const columnasClientes: Column<ClienteDto>[] = [
 		</aside>
 	</main>
 </Layout>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  function actualizarHora() {
+    const ahora = new Date();
+    const hora = ahora.toLocaleTimeString('es-MX', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+
+    const reloj = document.getElementById('reloj');
+    if (reloj) {
+      reloj.textContent = `Hora: ${hora}`;
+    }
+  }
+
+  actualizarHora();
+  setInterval(actualizarHora, 1000);
+
+
+  // cargar ventas
+  async function cargarVentas() {
+    //const res = await fetch('https://apioper.legumfrutsa.com/Api/Ventas/clientes');
+    const res = await fetch('https://localhost:44313/Api/Venta/All');
+    const data = await res.json();
+
+    const tbody = document.querySelector('[data-tab="vender"] tbody');
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+
+    data.forEach(v => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${v.id_venta}</td>
+        <td>${v.id_cliente}</td>
+        <td>${v.nombre_vendedor}</td>
+        <td>${v.tipo_venta}</td>
+        <td>${v.estado_venta}</td>
+        <td>${new Date(v.fecha_venta).toLocaleString('es-EC', {
+          timeZone: 'America/Guayaquil',
+          dateStyle: 'short',
+          timeStyle: 'short'
+        })}</td>
+        <td>$${Number(v.monto_total_Venta).toFixed(2)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // caragar clientes
+  async function cargarClientes() {
+    const res = await fetch('https://localhost:44313/Api/Cliente/All');
+    //const res = await fetch('https://apioper.legumfrutsa.com/Api/Clientes');
+    const data = await res.json();
+
+    const tbody = document.querySelector('[data-tab="cliente"] tbody');
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+
+    data.forEach(c => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${c.id_cliente}</td>
+        <td>${c.nombre}</td>
+        <td>${c.tipo}</td>
+        <td>${c.estado ? 'Activo' : 'Inactivo'}</td>
+        <td>${new Date(c.fecha_creacion).toLocaleString('es-EC', {
+          timeZone: 'America/Guayaquil',
+          dateStyle: 'short',
+          timeStyle: 'short'
+        })}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+
+  // cargar deudores
+  async function cargarDeudores() {
+  const rest = await fetch('https://localhost:44313/Api/Venta/ConDeuda');
+  const data = await rest.json();
+  const tbody = document.querySelector('[data-tab="pagos"] tbody');
+
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  data.forEach(d => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>
+        <input
+          type="checkbox"
+          class="row-checkbox"
+          data-row='${JSON.stringify(d)}'
+        /> 
+      </td>
+      <td>${d.id_venta}</td>
+      <td>${d.id_cliente}</td>
+      <td>${d.nombre_vendedor}</td>
+      <td>${d.tipo_venta}</td>
+      <td>${d.estado_venta}</td>
+      <td>${new Date(d.fecha_venta).toLocaleString('es-EC', {
+        timeZone: 'America/Guayaquil',
+        dateStyle: 'short',
+        timeStyle: 'short'
+      })}</td>
+      <td>$${Number(d.monto_total_Venta).toFixed(2)}</td>
+      `;
+    tbody.appendChild(tr);
+    });
+  }
+
+
+
+
+/// Manejo de selección de filas en la tabla de deudores
+  document.addEventListener('change', (e) => {
+
+  // Checkbox "Seleccionar todo"
+  if (e.target.id === 'select-all') {
+    const checked = e.target.checked;
+    document
+      .querySelectorAll('.row-checkbox')
+      .forEach(cb => cb.checked = checked);
+  }
+
+  // Checkbox individual
+  if (e.target.classList.contains('row-checkbox')) {
+    const all = document.querySelectorAll('.row-checkbox');
+    const checked = document.querySelectorAll('.row-checkbox:checked');
+    const selectAll = document.getElementById('select-all');
+
+    if (selectAll) {
+      selectAll.checked = all.length === checked.length;
+    }
+  }
+});
+
+
+
+
+
+  // carga inicial
+  cargarVentas();
+  cargarClientes();
+  cargarDeudores();
+
+  // eventos
+  window.addEventListener('venta-creada', cargarVentas);
+  window.addEventListener('cliente-creado', cargarClientes);
+  window.addEventListener('deudores-actualizados', cargarDeudores);
+
+});
+
+</script>
+

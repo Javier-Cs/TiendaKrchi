@@ -15,11 +15,10 @@
     </label>
 
     <label>
-      Estado venta
-      <select id="estado">
-        <option value="Pagado">Pagado</option>
-        <option value="Deuda">Deuda</option>
-
+      Tipo venta
+      <select id="tipoVenta">
+        <option value="CONTADO">Contado</option>
+        <option value="CREDITO">Crédito</option>
       </select>
     </label>
 
@@ -34,10 +33,10 @@
     </label>
 
     <label>
-      Tipo venta
-      <select id="tipoVenta">
-        <option value="Contado">Contado</option>
-        <option value="Credito">Crédito</option>
+      Estado venta
+      <select id="estado">
+        <option value="PAGADO">Pagado</option>
+        <option value="DEUDA">Deuda</option>
       </select>
     </label>
 
@@ -57,7 +56,7 @@
     </label>
 
     <div class="actions-left">
-      <button id="btn-limpiarVenta" class="btn limpiar">Limpiar</button>
+      <button id="btn-limpiarVenta" class="btn limpiar">LIMPIAR</button>
       <button id="btn-cancelarVenta" class="btn cancel">CANCELAR</button>
       <button id="btn-guardarVenta" class="btn save">REGISTRAR VENTA</button>
     </div>
@@ -101,7 +100,7 @@
       efectivo_recibido: Number(efectivo.value),
       monto_total_Venta: Number(monto.value),
       monto_vuelto: Number(vuelto.value),
-      fecha_venta: new Date().toISOString()
+      fecha_venta: new Date()
     };
 
     if (payload.efectivo_recibido < payload.monto_total_Venta) {
@@ -111,7 +110,8 @@
 
     try {
       const res = await fetch(
-        'https://apioper.legumfrutsa.com/Api/Ventas',
+        'https://localhost:44313/Api/Venta',
+        //'https://apioper.legumfrutsa.com/Api/Venta',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

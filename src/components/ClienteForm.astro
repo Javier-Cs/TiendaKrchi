@@ -67,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const fechaInput = fecha.value
     ? new Date(fecha.value).toISOString()
     : new Date().toISOString();
-    
     const payload = {
       nombre: nombreCliente.value.trim(),
       telefono: telefono.value.trim(),
@@ -86,7 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const res = await fetch(
-        'https://apioper.legumfrutsa.com/Api/Clientes',
+        'https://localhost:44313/Api/Cliente',
+        //'https://apioper.legumfrutsa.com/Api/Clientes/one',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Cliente registrado correctamente');
       limpiarFormulario();
 
-      // 🔔 notificar a la tabla
+      // notificar a la tabla
       window.dispatchEvent(new CustomEvent('cliente-creado'));
 
     } catch (err) {

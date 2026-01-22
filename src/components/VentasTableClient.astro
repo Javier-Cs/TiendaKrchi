@@ -1,45 +1,76 @@
 ---
-import SalesTable from './SalesTable.astro';
+interface Column<T = any> {
+  label: string;
+  field?: keyof T;
+  render?: (row: T) => string | number;
+}
 
-const { clienteId = 1 } = Astro.props;
+interface Props<T = any> {
+  columns: Column<T>[];
+  rows: T[];
+  keyField?: keyof T;
+  selectable?: boolean;
+}
+
+const {
+  columns = [],
+  rows = [],
+  keyField = 'id',
+  selectable = false
+} = Astro.props as Props;
 ---
 
-<div id="ventas-table">
-  <SalesTable
-    columns={[
-      { label: 'ID Venta', field: 'id_venta' },
-      { label: 'ID Cliente', field: 'id_cliente' },
-      { label: 'Vendedor', field: 'nombre_vendedor' },
-      { label: 'Tipo', field: 'tipo_venta' },
-      { label: 'Estado', field: 'estado_venta' },
-      {
-        label: 'Total',
-        render: v => `$${Number(v.monto_total_Venta).toFixed(2)}`
-      },
-      {
-        label: 'Fecha',
-        render: v => new Date(v.fecha_venta).toLocaleDateString()
-      }
-    ]}
-    rows={[]}
-    keyField="id_venta"
-  />
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        {selectable && (<th>
+            <input type="checkbox"
+            id="select-all"/>
+        </th>
+        )}
+        {columns.map(col => (
+          <th>{col.label}</th>
+        ))}
+      </tr>
+    </thead>
+
+    <tbody>
+      {Array.isArray(rows) && rows.length > 0 ? (
+        rows.map(row => (
+          <tr
+            class="table-row"
+            data-id={row[keyField]}
+          >
+            {selectable && (
+              <td>
+                <input
+                  type="checkbox"
+                  class="row-checkbox"
+                  value={row[keyField]}
+                  data-row={JSON.stringify(row)}
+                />
+              </td>
+            )}
+
+            {columns.map(col => (
+              <td>
+                {col.render
+                  ? col.render(row)
+                  : col.field
+                  ? row[col.field]
+                  : ''}
+              </td>
+            ))}
+          </tr>
+        ))
+      ) : (
+        <tr>
+          <td colspan={columns.length + (selectable ? 1 : 0)}>
+            Sin datos
+          </td>
+        </tr>
+      )}
+    </tbody>
+  </table>
 </div>
-
-<script client:load>
-  let ventas = [];
-
-  async function cargarVentas() {
-    const res = await fetch(
-      `https://apioperaciones.legumfrutsa.com/Api/Ventas/cliente/${clienteId}`
-    );
-    ventas = await res.json();
-
-    const event = new CustomEvent('ventas-actualizadas', { detail: ventas });
-    window.dispatchEvent(event);
-  }
-
-  window.addEventListener('venta-creada', cargarVentas);
-
-  cargarVentas();
-</script>
