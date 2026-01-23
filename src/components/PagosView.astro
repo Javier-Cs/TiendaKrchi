@@ -5,23 +5,25 @@
     
     <label>
       Buscar cliente
-      <input type="text" />
+      <input type="number" id="idclienteDeuda"/>
     </label>
 
     <label>
       Estado venta
-      <select id="estado">
-        <option value="PAGADO">Pagado</option>
+      <select id="estadoVntaRev">
         <option value="DEUDA">Deuda</option>
+        <option value="PAGADO">Pagado</option>
+        
       </select>
     </label>
 
 
     <label>
       Tipo venta
-      <select id="tipoVenta">
-        <option value="CONTADO">Contado</option>
+      <select id="tipoVntRev">
         <option value="CREDITO">Crédito</option>
+        <option value="CONTADO">Contado</option>
+        
       </select>
     </label>
 
@@ -33,20 +35,22 @@
     </div>
 </div>
 <script>
-  const idcliente = document.getElementById('idcliente') as HTMLInputElement;
-  const estado = document.getElementById('estado') as HTMLSelectElement;
-  const tipoVenta = document.getElementById('tipoVenta') as HTMLSelectElement;
+  const idcliente = document.getElementById('idclienteDeuda') as HTMLInputElement;
+  const estado = document.getElementById('estadoVntaRev') as HTMLSelectElement;
+  const tipoVenta = document.getElementById('tipoVntRev') as HTMLSelectElement;
   const btnBuscarDeuda = document.getElementById('btn-buscar') as HTMLButtonElement;
   const btnCancelar = document.getElementById('btn-cancelar') as HTMLButtonElement;
 
   btnBuscarDeuda.addEventListener('click', async (e) =>{
 
-    e.preventDefault();
-    const payload = {
-      id_cliente: Number(idcliente.value),
-      estado_venta: estado.value,
-      tipo_venta: tipoVenta.value
+    
+    // si ingresa vacio el id_cliente, cargar todas las ventas con deuda
+    if(!idcliente.value){
+      const rest = await fetch('https://localhost:44313/Api/Venta/ConDeuda');
+      const data = await rest.json();
+      window.dispatchEvent(new CustomEvent('ventas-sin-filtro', {detail: data}));
     }
+    
     try {
       const res = await fetch(`https://localhost:44313/Api/Venta/cliente/${idcliente.value}/estado/${estado.value}/tipo/${tipoVenta.value}`);
       const data = await res.json();

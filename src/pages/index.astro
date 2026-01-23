@@ -254,15 +254,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  // cargar deudores
-  async function cargarDeudores() {
-  const rest = await fetch('https://localhost:44313/Api/Venta/ConDeuda');
-  const data = await rest.json();
-  const tbody = document.querySelector('[data-tab="pagos"] tbody');
 
-  if (!tbody) return;
-  tbody.innerHTML = '';
-  data.forEach(d => {
+  // cargar deudores
+  /*window.addEventListener('ventas-sin-filtro', (e) => {
+    const data = e.detail;
+    const tbody = document.querySelector('[data-tab="pagos"] tbody');
+
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    data.forEach(d => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>
@@ -286,7 +286,10 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     tbody.appendChild(tr);
     });
-  }
+  });*/
+
+
+
 
 
 
@@ -317,16 +320,86 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+  // Escuchar el evento de ventas filtradas
+  /*window.addEventListener('ventas-filtradas', (e) => {
+  const data = e.detail;
+
+  const tbody = document.querySelector('[data-tab="pagos"] tbody');
+  if (!tbody) return;
+
+  tbody.innerHTML = '';
+
+    data.forEach(d => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <input
+            type="checkbox"
+            class="row-checkbox"
+            data-row='${JSON.stringify(d)}'
+          />
+        </td>
+        <td>${d.id_venta}</td>
+        <td>${d.id_cliente}</td>
+        <td>${d.nombre_vendedor}</td>
+        <td>${d.tipo_venta}</td>
+        <td>${d.estado_venta}</td>
+        <td>${new Date(d.fecha_venta).toLocaleString('es-EC', {
+          timeZone: 'America/Guayaquil',
+          dateStyle: 'short',
+          timeStyle: 'short'
+        })}</td>
+        <td>$${Number(d.monto_total_Venta).toFixed(2)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  });*/
+
+  function renderDeudas(data) {
+  const tbody = document.querySelector('[data-tab="pagos"] tbody');
+  if (!tbody) return;
+
+  tbody.innerHTML = '';
+
+  data.forEach(d => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>
+        <input
+          type="checkbox"
+          class="row-checkbox"
+          data-row='${JSON.stringify(d)}'
+        />
+      </td>
+      <td>${d.id_venta}</td>
+      <td>${d.id_cliente}</td>
+      <td>${d.nombre_vendedor}</td>
+      <td>${d.tipo_venta}</td>
+      <td>${d.estado_venta}</td>
+      <td>${new Date(d.fecha_venta).toLocaleString('es-EC', {
+        timeZone: 'America/Guayaquil',
+        dateStyle: 'short',
+        timeStyle: 'short'
+      })}</td>
+      <td>$${Number(d.monto_total_Venta).toFixed(2)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
 
   // carga inicial
   cargarVentas();
   cargarClientes();
-  cargarDeudores();
+  //cargarDeudores();
 
   // eventos
   window.addEventListener('venta-creada', cargarVentas);
   window.addEventListener('cliente-creado', cargarClientes);
-  window.addEventListener('deudores-actualizados', cargarDeudores);
+  window.addEventListener('ventas-filtradas', e => renderDeudas(e.detail));
+  window.addEventListener('ventas-sin-filtro', e => renderDeudas(e.detail));
+
+  //window.addEventListener('deudores-actualizados', cargarDeudores);
 
 });
 
