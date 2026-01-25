@@ -1,21 +1,163 @@
 ---
-// 1. Frontmatter: Define las props que acepta el componente
-const { titulo, contenido } = Astro.props;
+
 ---
+
+<style>
+.payment {
+  max-width: 420px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #f9fafb;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.12);
+  font-family: system-ui, sans-serif;
+}
+
+.logo {
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.4rem;
+  padding: 1rem;
+  background: #e5e7eb;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  margin-bottom: .8rem;
+}
+
+label {
+  font-size: .85rem;
+  color: #374151;
+}
+
+input, select {
+  padding: .5rem .6rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: .9rem;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .75rem;
+  margin: 1rem 0;
+  background: #eef2ff;
+  border-radius: 10px;
+  font-weight: 600;
+  color: #1e3a8a;
+  font-size: 20px;
+}
+
+.totalVuelto {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .40rem;
+  background: #ffeeee;;
+  border-radius: 10px;
+  font-weight: 600;
+  color: #ff070f;
+  font-size: 15px;
+}
+
+.btn.pay {
+  width: 100%;
+  padding: .8rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+
+.btn.pay:hover {
+  background: #1d4ed8;
+}
+
+
+</style>
+
 <div class="payment">
   <div class="logo">LOGO</div>
 
-  <label>Fecha de pago <input type="date" /></label>
-  <label>Cliente <input type="text" /></label>
-  <label>Total ventas <input type="text" /></label>
-  <label>Efectivo dado <input type="number" /></label>
-  <label>Monto <input type="text" /></label>
-  <label>Vuelto <input type="text" /></label>
+  <label>Fecha de pago:  <input type="date" /></label>
+  <label>Nombre Cliente:  <input type="text" /></label>
+
+  <label>
+    Nombre del Vendedor: 
+    <select>
+      <option value="Don Maximo">Don Maximo</option>
+      <option value="Scarlet">Scarlet</option>
+      <option value="Jean">Jean</option>
+      <option value="Jhon">Jhon</option>
+    </select>
+  </label>
+
+  <label>Total ventas: <input id="total-ventas" type="number" readonly/></label>
+  <label>Efectivo recibido: <input type="number" id="efectivo-dado" /></label>
+  <label>Monto: <input id="monto-total" type="number" readonly/></label>
+  <label>Vuelto: <input type="number" id="vueltoDeDeuda" readonly/></label>
+
+
+  <div class="totalVuelto">
+    Vuelto: $
+    <span id="totalDeCambio">0.00</span>
+  </div>
 
   <div class="total">
     Total a pagar: $
-    <label for="d">80.00</label>
+    <span id="total-A-Pagar">0.00</span>
   </div>
 
   <button class="btn pay">PAGAR</button>
 </div>
+
+<script is:inline>
+  window.addEventListener('ventas-seleccionadas-para-pago', (e) => {
+    const ventas = e.detail || [];
+
+    const totalVentas = ventas.length;
+    const montoTotal = ventas.reduce(
+      (sum, v) => sum + Number(v.monto_total_Venta || 0),
+      0
+    );
+
+    const totalVentasInput = document.getElementById('total-ventas');
+    const montoTotalInput = document.getElementById('monto-total');
+    const totalPagar = document.getElementById('total-A-Pagar');
+    const efectivo = document.getElementById('efectivo-dado');
+    const vuelto = document.getElementById('vueltoDeDeuda');
+    const totalDeCambio = document.getElementById('totalDeCambio');
+
+    totalVentasInput.value = totalVentas;
+    montoTotalInput.value = montoTotal.toFixed(2);
+    totalPagar.textContent = montoTotal.toFixed(2);
+
+    const calcularVuelto = () => {
+      const efectivoValor = Number(efectivo.value || 0);
+      const total = Number(montoTotalInput.value || 0);
+      vuelto.value = Math.max(efectivoValor - total, 0).toFixed(2);
+      totalDeCambio.textContent = vuelto.value;
+    };
+
+    efectivo.oninput = calcularVuelto;
+    calcularVuelto();
+  });
+</script>
+
+

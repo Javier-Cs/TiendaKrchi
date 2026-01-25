@@ -197,8 +197,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // cargar ventas
   async function cargarVentas() {
-    //const res = await fetch('https://apioper.legumfrutsa.com/Api/Ventas/clientes');
-    const res = await fetch('https://localhost:44313/Api/Venta/All');
+    const res = await fetch('https://apioper.legumfrutsa.com/Api/Venta/All');
+    //const res = await fetch('https://localhost:44313/Api/Venta/All');
     const data = await res.json();
 
     const tbody = document.querySelector('[data-tab="vender"] tbody');
@@ -227,8 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // caragar clientes
   async function cargarClientes() {
-    const res = await fetch('https://localhost:44313/Api/Cliente/All');
-    //const res = await fetch('https://apioper.legumfrutsa.com/Api/Clientes');
+    //const res = await fetch('https://localhost:44313/Api/Cliente/All');
+    const res = await fetch('https://apioper.legumfrutsa.com/Api/Cliente/All');
     const data = await res.json();
 
     const tbody = document.querySelector('[data-tab="cliente"] tbody');
@@ -255,105 +255,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  // cargar deudores
-  /*window.addEventListener('ventas-sin-filtro', (e) => {
-    const data = e.detail;
-    const tbody = document.querySelector('[data-tab="pagos"] tbody');
-
-    if (!tbody) return;
-    tbody.innerHTML = '';
-    data.forEach(d => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>
-        <input
-          type="checkbox"
-          class="row-checkbox"
-          data-row='${JSON.stringify(d)}'
-        /> 
-      </td>
-      <td>${d.id_venta}</td>
-      <td>${d.id_cliente}</td>
-      <td>${d.nombre_vendedor}</td>
-      <td>${d.tipo_venta}</td>
-      <td>${d.estado_venta}</td>
-      <td>${new Date(d.fecha_venta).toLocaleString('es-EC', {
-        timeZone: 'America/Guayaquil',
-        dateStyle: 'short',
-        timeStyle: 'short'
-      })}</td>
-      <td>$${Number(d.monto_total_Venta).toFixed(2)}</td>
-      `;
-    tbody.appendChild(tr);
-    });
-  });*/
 
 
-
-
-
-
+  let ventasSeleccionadas = [];
 
 /// Manejo de selección de filas en la tabla de deudores
   document.addEventListener('change', (e) => {
 
   // Checkbox "Seleccionar todo"
-  if (e.target.id === 'select-all') {
-    const checked = e.target.checked;
-    document
-      .querySelectorAll('.row-checkbox')
-      .forEach(cb => cb.checked = checked);
-  }
+    if (
+      !e.target.classList.contains('row-checkbox') &&
+      e.target.id !== 'select-all'
+    ) return;
 
-  // Checkbox individual
-  if (e.target.classList.contains('row-checkbox')) {
-    const all = document.querySelectorAll('.row-checkbox');
-    const checked = document.querySelectorAll('.row-checkbox:checked');
-    const selectAll = document.getElementById('select-all');
-
-    if (selectAll) {
-      selectAll.checked = all.length === checked.length;
+    // seleccionar todo
+    if (e.target.id === 'select-all') {
+      document
+        .querySelectorAll('.row-checkbox')
+        .forEach(cb => cb.checked = e.target.checked);
     }
-  }
+
+    // 🔥 recalcular SIEMPRE
+    recalcularSeleccion();
 });
 
 
-
-
-  // Escuchar el evento de ventas filtradas
-  /*window.addEventListener('ventas-filtradas', (e) => {
-  const data = e.detail;
-
-  const tbody = document.querySelector('[data-tab="pagos"] tbody');
-  if (!tbody) return;
-
-  tbody.innerHTML = '';
-
-    data.forEach(d => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>
-          <input
-            type="checkbox"
-            class="row-checkbox"
-            data-row='${JSON.stringify(d)}'
-          />
-        </td>
-        <td>${d.id_venta}</td>
-        <td>${d.id_cliente}</td>
-        <td>${d.nombre_vendedor}</td>
-        <td>${d.tipo_venta}</td>
-        <td>${d.estado_venta}</td>
-        <td>${new Date(d.fecha_venta).toLocaleString('es-EC', {
-          timeZone: 'America/Guayaquil',
-          dateStyle: 'short',
-          timeStyle: 'short'
-        })}</td>
-        <td>$${Number(d.monto_total_Venta).toFixed(2)}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-  });*/
 
   function renderDeudas(data) {
   const tbody = document.querySelector('[data-tab="pagos"] tbody');
@@ -387,6 +313,19 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 }
 
+function recalcularSeleccion() {
+  const seleccionadas = Array.from(
+    document.querySelectorAll('.row-checkbox:checked')
+  ).map(cb => JSON.parse(cb.dataset.row));
+
+  window.dispatchEvent(
+    new CustomEvent('ventas-seleccionadas-para-pago', {
+      detail: seleccionadas
+    })
+  );
+}
+
+
 
   // carga inicial
   cargarVentas();
@@ -398,8 +337,8 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('cliente-creado', cargarClientes);
   window.addEventListener('ventas-filtradas', e => renderDeudas(e.detail));
   window.addEventListener('ventas-sin-filtro', e => renderDeudas(e.detail));
+  //recalcularSeleccion();
 
-  //window.addEventListener('deudores-actualizados', cargarDeudores);
 
 });
 
