@@ -108,7 +108,7 @@ input:focus, select:focus {
     </select>
   </label>
 
-  <label>Total ventas: <input id="total-ventas" type="number" readonly/></label>
+  <label>Num de ventas: <input id="total-ventas" type="number" readonly/></label>
   <label>Efectivo recibido: <input type="number" id="efectivo-dado" /></label>
   <label>Monto: <input id="monto-total" type="number" readonly/></label>
   <label>Vuelto: <input type="number" id="vueltoDeDeuda" readonly/></label>
@@ -124,25 +124,28 @@ input:focus, select:focus {
     <span id="total-A-Pagar">0.00</span>
   </div>
 
-  <button class="btn pay">PAGAR</button>
+  <button id="boton-pagar" class="btn pay" disabled>PAGAR</button>
 </div>
 
 <script is:inline>
-  window.addEventListener('ventas-seleccionadas-para-pago', (e) => {
-    const ventas = e.detail || [];
+  let ventasActuales = [];
 
-    const totalVentas = ventas.length;
-    const montoTotal = ventas.reduce(
-      (sum, v) => sum + Number(v.monto_total_Venta || 0),
-      0
-    );
 
-    const totalVentasInput = document.getElementById('total-ventas');
+  const totalVentasInput = document.getElementById('total-ventas');
     const montoTotalInput = document.getElementById('monto-total');
     const totalPagar = document.getElementById('total-A-Pagar');
     const efectivo = document.getElementById('efectivo-dado');
     const vuelto = document.getElementById('vueltoDeDeuda');
     const totalDeCambio = document.getElementById('totalDeCambio');
+    const botonPagar = document.getElementById('boton-pagar');
+
+
+    const totalVentas = ventasActuales.length;
+    const montoTotal = ventasActuales.reduce(
+      (sum, v) => sum + Number(v.monto_total_Venta || 0),
+      0
+    );
+
 
     totalVentasInput.value = totalVentas;
     montoTotalInput.value = montoTotal.toFixed(2);
@@ -153,9 +156,27 @@ input:focus, select:focus {
       const total = Number(montoTotalInput.value || 0);
       vuelto.value = Math.max(efectivoValor - total, 0).toFixed(2);
       totalDeCambio.textContent = vuelto.value;
+      botonPagar.disabled = (ventasActuales.length > 0 && efectivoValor >= total)
     };
 
     efectivo.oninput = calcularVuelto;
+
+
+  window.addEventListener('ventas-seleccionadas-para-pago', (e) => {
+    ventasActuales = e.detail || [];
+
+    const totalVentas = ventasActuales.length;
+    const montoTotal = ventasActuales.reduce(
+      (sum, v) => sum + Number(v.monto_total_Venta || 0),
+      0
+    );
+
+    totalVentasInput.value = totalVentas;
+    montoTotalInput.value = montoTotal.toFixed(2);
+    totalPagar.textContent = montoTotal.toFixed(2);
+    
+
+    
     calcularVuelto();
   });
 </script>
