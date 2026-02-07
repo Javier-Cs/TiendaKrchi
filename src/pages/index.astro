@@ -6,6 +6,7 @@ import ClienteForm from '../components/ClienteForm.astro';
 import PagosView from '../components/PagosView.astro';
 import Layout from '../layouts/Layout.astro';
 import Tabs from '../components/Tabs.astro';
+import ModalFlotante from '../components/ModalFlotante.astro';
 import "../styles/main.css";
 import VentasTableClient from '../components/VentasTableClient.astro';
 
@@ -132,6 +133,7 @@ const columnasDeudas: Column<VentaDto>[] = [
 				<div data-tab="vender" class="tab-panel active">
 					<SalesForm/>
 					<div>
+            <ModalFlotante/>
 						<SalesTable
 							columns={columnasVentas}
   							rows={[]}
@@ -175,6 +177,61 @@ const columnasDeudas: Column<VentaDto>[] = [
 
 
 <script>
+document.addEventListener('click', async (e) => {
+  const row = e.target.closest('.selectable-row');
+  if (!row) return;
+
+  const idVenta = row.dataset.id;
+  if (!idVenta) return;
+
+  abrirModalVenta(idVenta);
+});
+
+async function abrirModalVenta(idVenta) {
+  const res = await fetch(`https://apioper.legumfrutsa.com/Api/Venta/${idVenta}`);
+  const v = await res.json();
+
+
+  //document.getElementById('modalIdVenta').value = v.id_venta;
+  //document.getElementById('modalCliente').value = v.id_cliente;
+
+
+  document.getElementById('modalDescripcion').value = v.descripcion_venta;
+  document.getElementById('modalTipo').value = v.tipo_venta;
+  document.getElementById('modalTotal').value = v.monto_total_Venta;
+  document.getElementById('modalEfectivo').value = v.efectivo_recibido;
+
+  modalVuelto.value = v.monto_vuelto;
+  
+   // para referencia interna
+  modalIdVenta.textContent = v.id_venta;
+  
+  modalVendedor.textContent = v.nombre_vendedor;
+  modalEstado.textContent = v.estado_venta;
+  modalFecha.textContent = new Date(v.fecha_venta).toLocaleString('es-EC');
+  
+
+  const restcli = await fetch(`https://apioper.legumfrutsa.com/Api/Cliente/${v.id_cliente}`);
+  const cli = await restcli.json();
+  modalClienteNombre.textContent= cli.nombre; // luego puedes cambiar a nombre
+  modalClienteCorreo.textContent = cli.email;
+  modalCliId.textContent = cli.id_cliente;
+  
+  modalVenta.style.display = 'flex';  
+
+ 
+}
+
+function cerrarModalVenta() {
+  document.getElementById('modalVenta').style.display = 'none';
+}
+
+document.getElementById('btnCerrarModal')
+  .addEventListener('click', cerrarModalVenta);
+
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
 
   function actualizarHora() {
@@ -194,6 +251,8 @@ document.addEventListener('DOMContentLoaded', () => {
   actualizarHora();
   setInterval(actualizarHora, 1000);
 
+  
+
 
   // cargar ventas
   async function cargarVentas() {
@@ -208,6 +267,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     data.forEach(v => {
       const tr = document.createElement('tr');
+      tr.classList.add('selectable-row');
+      tr.dataset.id = v.id_venta;
+
       tr.innerHTML = `
         <td>${v.id_venta}</td>
         <td>${v.id_cliente}</td>

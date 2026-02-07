@@ -1,0 +1,244 @@
+<div id="modalVenta" class="modal">
+  <div class="modal-card">
+
+    <header class="modal-header">
+      <h3>Editar venta</h3>
+      <button id="btnCerrarModal" class="close-btn">✕</button>
+    </header>
+
+
+    <div class="modal-body">
+        <div class="field field-compact">
+            <!--<div class="inline-fields">
+                <input id="modalCliente" disabled class="xs">
+            </div>
+            <input type="hidden" id="modalClienteId">-->
+
+            <span><strong>Id de Cliente:</strong> <span id="modalCliId"></span></span>
+            <span><strong>Nombre Cliente:</strong> <span id="modalClienteNombre"></span></span>
+            <span><strong>Correo Cliente:</strong> <span id="modalClienteCorreo"></span></span>
+        </div>
+
+
+      <div class="field">
+        <label>Descripción</label>
+        <textarea id="modalDescripcion"></textarea>
+        
+
+      </div>
+
+      <div class="field">
+        <label>Tipo de venta</label>
+        <select id="modalTipo">
+          <option value="CONTADO">Contado</option>
+          <option value="CREDITO">Crédito</option>
+        </select>
+      </div>
+      
+      <div class="field-row">
+        <div class="field">
+            <label>Total</label>
+            <input id="modalTotal" type="number" step="0.01">
+        </div>
+
+        <div class="field">
+            <label>Efectivo</label>
+            <input id="modalEfectivo" type="number" step="0.01">
+        </div>
+
+        <div class="field">
+            <label>Vuelto</label>
+            <input id="modalVuelto" disabled>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-info">
+        <span><strong>Id Venta: </strong> <span id="modalIdVenta"></span></span>
+        <span><strong>Vendedor: </strong> <span id="modalVendedor"></span></span>
+        <span><strong>Estado: </strong> <span id="modalEstado"></span></span>
+        <span><strong>Fecha: </strong> <span id="modalFecha"></span></span>
+    </div>
+
+    <footer class="modal-footer">
+      <button id="btnEliminarVenta" class="btn-danger">Limpiar campos</button>
+      <div class="footer-actions">
+        <!-- <button id="btnCerrarModal" class="btn-secondary">Cancelar</button>-->
+        <button id="btnGuardarVenta" class="btn-primary">Guardar cambios</button>
+      </div>
+    </footer>
+
+  </div>
+</div>
+
+
+<style>
+.modal-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 20px;
+  background: #f9fafb;
+  font-size: 12px;
+  color: #374151;
+  border-top: 1px solid #e5e7eb;
+  box-sizing: border-box;
+}
+
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.modal-card {
+  background: #ffffff;
+  width: min(540px, 92vw);
+  border-radius: 10px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.2);
+  overflow: visible;
+  animation: fadeIn .2s ease-out;
+}
+
+/* Header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: .6;
+}
+.close-btn:hover {
+  opacity: 1;
+}
+.field textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 70px;
+  padding: 8px 10px;
+  box-sizing: border-box;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Body */
+.modal-body {
+  padding: 20px;
+  display: grid;
+  gap: 12px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field label {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.field input,
+.field select {
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.field input:disabled {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+/* Footer */
+.modal-footer {
+  padding: 12px 20px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Buttons */
+button {
+  padding: 10px 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: white;
+}
+.btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.btn-secondary {
+  background: #e5e7eb;
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: white;
+}
+
+
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+</style>

@@ -34,7 +34,7 @@ const {
     <tbody>
   {Array.isArray(rows) && rows.length > 0 ? (
     rows.map(row => (
-      <tr class="table-row"
+      <tr class="table-row selectable-row"
           data-id={row[keyField]}>
             
         {selectable && (
