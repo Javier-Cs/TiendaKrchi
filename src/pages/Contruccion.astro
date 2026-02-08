@@ -1,0 +1,202 @@
+---
+const fechaDisponible = "27 de Febrero 2026";
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Página web en construcción</title>
+    <meta name="description" content="Página web en construcción" />
+  </head>
+
+  <body>
+    <main class="container">
+      <section class="card">
+        <!-- TEXTO -->
+        <div class="text">
+          <h1>Página web<br />en construcción</h1>
+
+          <p>
+            No jodas amiga, no hemos encontrado un mensaje más original para
+            decirte que estamos trabajando en esto.
+          </p>
+
+          <h2>Web disponible en:</h2>
+          <span class="time">{fechaDisponible}</span>
+          <p></p>
+          <button id="btnPortal" class="btn-primary">
+            Portal de Ventas 
+          </button>
+          
+        </div>
+       
+        <!-- ROBOT -->
+        <div class="image">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png"
+            alt="Robot trabajando"
+          />
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
+
+<script>
+  document.getElementById('btnPortal')?.addEventListener('click', () => {
+    window.location.href = '/PortalVentas';
+  });
+</script>
+
+
+<style>
+  :root {
+    --primary: #00ffe1;
+    --secondary: #00e1ff;
+	--tercero: #1f8ae7;
+    --text: #0f172a;
+    --muted: #475569;
+  }
+
+
+  button {
+    padding: 10px 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .btn-primary {
+    background: #2563eb;
+    color: white;
+  }
+  /* FONDO */
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg);
+  }
+
+  /* CONTENEDOR CENTRADO */
+  .container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  /* TARJETA */
+  .card {
+    background: white;
+    max-width: 900px;
+    width: 100%;
+    padding: 3rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
+
+    /* 🔑 DOS COLUMNAS */
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  /* TEXTO */
+  .text h1 {
+    margin: 0 0 1.2rem;
+    font-size: 2.6rem;
+    line-height: 1.2;
+    color: var(--tercero);
+  }
+
+  .text p {
+    margin: 0 0 2rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-size: 1.05rem;
+  }
+
+  .text h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  .time {
+    font-size: 1.4rem;
+    font-weight: 800;
+    background: linear-gradient(
+      90deg,
+      var(--text)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* ROBOT */
+  .image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .image img {
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+    animation: float 4s ease-in-out infinite;
+  }
+
+  /* ANIMACIÓN SUAVE */
+  @keyframes float {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  /* 📱 RESPONSIVE */
+  @media (max-width: 768px) {
+    .card {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    .image img {
+      max-width: 220px;
+      margin-top: 1.5rem;
+    }
+
+    .text h1 {
+      font-size: 2.1rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+  .card {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .image img {
+    max-width: 220px;
+    margin-top: 1.5rem;
+  }
+
+  .text h1 {
+    font-size: 2.1rem;
+  }
+}
+
+</style>
