@@ -2,7 +2,7 @@
   <div class="modal-card">
 
     <header class="modal-header">
-      <h3>Editar venta</h3>
+      <h3>Ventana de Editar venta temporal</h3>
       <button id="btnCerrarModal" class="close-btn">✕</button>
     </header>
 
@@ -37,24 +37,24 @@
       
       <div class="field-row">
         <div class="field">
-            <label>Total</label>
+            <label>Total de la venta</label>
             <input id="modalTotal" type="number" step="0.01">
         </div>
 
         <div class="field">
-            <label>Efectivo</label>
+            <label>Efectivo recibido</label>
             <input id="modalEfectivo" type="number" step="0.01">
         </div>
 
         <div class="field">
-            <label>Vuelto</label>
+            <label>Vuelto entregado</label>
             <input id="modalVuelto" disabled>
         </div>
       </div>
     </div>
 
     <div class="modal-info">
-        <span><strong>Id Venta: </strong> <span id="modalIdVenta"></span></span>
+        <span><strong>Id Venta: </strong> <span id="modalIdVenta" data-id=""></span></span>
         <span><strong>Vendedor: </strong> <span id="modalVendedor"></span></span>
         <span><strong>Estado: </strong> <span id="modalEstado"></span></span>
         <span><strong>Fecha: </strong> <span id="modalFecha"></span></span>
@@ -64,7 +64,7 @@
       <button id="btnEliminarVenta" class="btn-danger">Limpiar campos</button>
       <div class="footer-actions">
         <!-- <button id="btnCerrarModal" class="btn-secondary">Cancelar</button>-->
-        <button id="btnGuardarVenta" class="btn-primary">Guardar cambios</button>
+        <button id="btnGuardarCambioVenta" class="btn-primary">Guardar cambios</button>
       </div>
     </footer>
 
@@ -242,3 +242,69 @@ button {
 }
 
 </style>
+<script>
+import VentanaDetalleModal from "./VentanaDetalleModal.astro"
+
+  const descripcion = document.getElementById('modalDescripcion') as HTMLTextAreaElement
+  const tipoVenta = document.getElementById('modalTipo') as HTMLSelectElement
+  const totalValorV = document.getElementById('modalTotal') as HTMLInputElement
+  const efectivoRecibido = document.getElementById('modalEfectivo') as HTMLInputElement
+  //let idventa = document.getElementById('modalIdVenta')
+  const modalIdVenta = document.getElementById('modalIdVenta') as HTMLSpanElement
+  const Actulizarventa = document.getElementById('btnGuardarCambioVenta') as HTMLButtonElement
+  
+
+
+  Actulizarventa.addEventListener('click', async (e) =>{
+    e.preventDefault();
+
+    const idventa = modalIdVenta.dataset.id;
+    if (!idventa) {
+      alert('ID de venta no encontrado');
+      return;
+    }
+    const payload = {
+      descripcion_venta: descripcion.value,
+      tipo_venta: tipoVenta.value,
+      efectivo_recibido: Number(efectivoRecibido.value),
+      monto_total_Venta: Number(totalValorV.value)
+    };
+
+    if(payload.efectivo_recibido < payload.monto_total_Venta){
+      alert('Efectivo insuficiente');
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        //'https://localhost:44313/Api/Venta?ventaId=59',
+        `https://apioper.legumfrutsa.com/Api/Venta?ventaId=${idventa}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }
+      );
+
+      if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error);
+      }
+      alert('Venta actualizada correctamente');
+      cerrarModalVenta();
+
+    } catch (error) {
+      console.error(error);
+      alert('Error al actualizar la venta');
+    }
+  
+  });
+  function cerrarModalVenta() {
+    document.getElementById('modalVenta').style.display = 'none';
+  }
+
+  
+    
+
+
+</script>

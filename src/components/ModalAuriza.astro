@@ -1,0 +1,58 @@
+<div id="modalAuth" class="modal">
+  <div class="modal-card auth-card">
+
+    <header class="modal-header">
+      <h3>Autorización requerida</h3>
+      <button id="btnCerrarAuth" class="close-btn">✕</button>
+    </header>
+
+    <div class="modal-body">
+      <p class="auth-text">
+        Para confirmar los cambios de esta venta, ingrese sus credenciales.
+      </p>
+
+      <div class="field">
+        <label>Usuario</label>
+        <input id="authUsuario" type="text" autocomplete="username">
+      </div>
+
+      <div class="field">
+        <label>Contraseña</label>
+        <input id="authPassword" type="password" autocomplete="current-password">
+      </div>
+
+      <div id="authError" class="auth-error" hidden>
+        Usuario o contraseña incorrectos
+      </div>
+    </div>
+
+    <footer class="modal-footer">
+      <button id="btnCancelarAuth" class="btn-secondary">Cancelar</button>
+      <button id="btnConfirmarAuth" class="btn-primary">
+        Confirmar cambio
+      </button>
+    </footer>
+
+  </div>
+</div>
+<style>
+    .auth-card {
+  width: min(420px, 92vw);
+}
+
+.auth-text {
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 12px;
+}
+
+.auth-error {
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: #fee2e2;
+  color: #b91c1c;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+</style>

@@ -210,12 +210,14 @@ async function abrirModalVenta(idVenta) {
   modalEstado.textContent = v.estado_venta;
   modalFecha.textContent = new Date(v.fecha_venta).toLocaleString('es-EC');
   
+  modalIdVenta.dataset.id = v.id_venta;
 
   const restcli = await fetch(`https://apioper.legumfrutsa.com/Api/Cliente/${v.id_cliente}`);
   const cli = await restcli.json();
   modalClienteNombre.textContent= cli.nombre; // luego puedes cambiar a nombre
   modalClienteCorreo.textContent = cli.email;
   modalCliId.textContent = cli.id_cliente;
+
   
   modalVenta.style.display = 'flex';  
 
@@ -226,8 +228,17 @@ function cerrarModalVenta() {
   document.getElementById('modalVenta').style.display = 'none';
 }
 
+/*function validarCambiosVenta() {
+  const cambiarVenta = document.getElementById('btnGuardarCambioVenta')
+}*/
+
+
+
 document.getElementById('btnCerrarModal')
   .addEventListener('click', cerrarModalVenta);
+
+/*document.getElementById('btnGuardarCambioVenta')
+  .addEventListener('click', validarCambiosVenta);*/
 
 
 
