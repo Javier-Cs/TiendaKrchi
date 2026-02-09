@@ -1,5 +1,6 @@
 ---
 
+
 ---
 <div class="form">
   <div class="form-grid">
@@ -24,7 +25,7 @@
 
     <label>
       Buscar cliente
-      <input id="buscarCliente" type="text"  placeholder="escriba el nombre del cliente.."/>
+      <input id="buscarCliente" type="text"  placeholder="Escriba el nombre del cliente.."/>
       <input type="hidden" id="clienteid">
       <div id="listaClientes" class="autocomplete"></div>
     </label>
@@ -92,7 +93,7 @@
 
   buscarCliente.addEventListener("input",e =>{
     const text = e.target.value;
-    if(text.length < 2) {
+    if(text.length < 1) {
       lista.innerHTML = "";
       return;
     }

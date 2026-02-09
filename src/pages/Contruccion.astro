@@ -19,8 +19,7 @@ const fechaDisponible = "27 de Febrero 2026";
           <h1>Página web<br />en construcción</h1>
 
           <p>
-            No jodas amiga, no hemos encontrado un mensaje más original para
-            decirte que estamos trabajando en esto.
+            Estamos trabajando en esto justo ahora.
           </p>
 
           <h2>Web disponible en:</h2>
@@ -41,6 +40,18 @@ const fechaDisponible = "27 de Febrero 2026";
         </div>
       </section>
     </main>
+    <footer class="footer">
+        <p>
+            © {new Date().getFullYear()} Todos los derechos reservados ·
+            <a
+            href="https://github.com/Javier-Cs"
+            target="_blank"
+            rel="noopener noreferrer"
+            >
+            Javier Cs
+            </a>
+        </p>
+    </footer>
   </body>
 </html>
 
@@ -198,5 +209,31 @@ const fechaDisponible = "27 de Febrero 2026";
     font-size: 2.1rem;
   }
 }
+
+.footer {
+  width: 100%;
+  padding: 1rem 2rem;
+
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+
+  position: fixed;
+  bottom: 0;
+  left: 0;
+
+  background: transparent;
+}
+
+.footer a {
+  color: var(--tercero);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
 
 </style>

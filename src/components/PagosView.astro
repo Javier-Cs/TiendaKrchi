@@ -5,7 +5,9 @@
     
     <label>
       Buscar cliente
-      <input type="number" id="idclienteDeuda"/>
+      <input type="text" id="ibuscarIdDeudor" placeholder="Escriba el nombre del cliente..">
+      <input id="idclienteDeuda" type="hidden"/>
+      <div id="listaDeDeudores" class="autocompletardeudores"></div>
     </label>
 
     <label>
@@ -35,11 +37,61 @@
     </div>
 </div>
 <script>
+import { literal } from "astro/zod";
+
   const idcliente = document.getElementById('idclienteDeuda') as HTMLInputElement;
   const estado = document.getElementById('estadoVntaRev') as HTMLSelectElement;
   const tipoVenta = document.getElementById('tipoVntRev') as HTMLSelectElement;
   const btnBuscarDeuda = document.getElementById('btn-buscar') as HTMLButtonElement;
   const btnCancelar = document.getElementById('btn-cancelar') as HTMLButtonElement;
+
+  const BuscarDeudortxt = document.getElementById('ibuscarIdDeudor') as HTMLInputElement
+  const idDeudor = document.getElementById('idclienteDeuda') as HTMLInputElement
+  const ListaDeudores = document.getElementById('listaDeDeudores') as HTMLDivElement
+  let timeOut2 = null;
+
+
+
+  BuscarDeudortxt.addEventListener("input", e => {
+    const text2 = e.target.value;
+    if(text2.length < 1){
+      ListaDeudores.innerHTML = "";
+      return; 
+    }
+
+    clearTimeout(timeOut2);
+    timeOut2 = setTimeout(() => {
+      FBuscarCliente2(text2)
+    }, 300);
+  });
+
+  function FBuscarCliente2(text){
+    fetch(`https://apioper.legumfrutsa.com/Api/Cliente/buscar?nombre=${text}`)
+    .then(rest => rest.json())
+    .then(data => mostrarResultados(data))
+    .catch(err => console.error(err));
+  }
+
+  function mostrarResultados(clientes){
+    ListaDeudores.innerHTML="";
+
+    clientes.forEach(c => {
+      const item = document.createElement("div");
+      item.textContent = c.nombre;
+      item.classList.add("item-cliente");
+
+      item.onclick = () =>{
+        BuscarDeudortxt.value = c.nombre;
+        idDeudor.value = c.id_cliente;
+        ListaDeudores.innerHTML = "";
+      };
+
+      ListaDeudores.appendChild(item);
+      
+      
+    });
+  }
+
 
   btnBuscarDeuda.addEventListener('click', async (e) =>{
 
