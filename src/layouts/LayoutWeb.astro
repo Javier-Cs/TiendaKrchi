@@ -1,4 +1,6 @@
 ---
+import Footer from '../components/web/Footer.astro';
+import Header from '../components/web/Header.astro';
 ---
 <!DOCTYPE html>
 <html lang="es">
@@ -12,7 +14,9 @@
   </head>
 
   <body>
-    <slot />
+    <Header/>
+	<slot />
+    <Footer/>
   </body>
 
 </html>

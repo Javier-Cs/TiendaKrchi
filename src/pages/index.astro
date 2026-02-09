@@ -1,8 +1,16 @@
 ---
 import Layout  from '../layouts/LayoutWeb.astro';
+import Layoutcostru from '../layouts/LayoutContruccion.astro';
 import Construir from '../pages/Contruccion.astro';
+import Hero from '../components/web/Hero.astro';
+import Products from '../components/web/Products.astro';
 import "../styles/main.css";
 ---
 
 <Layout>
+  <Hero/>
+  <Products/>
 </Layout>
+<Layoutcostru>
+  <Construir/>
+</Layoutcostru>

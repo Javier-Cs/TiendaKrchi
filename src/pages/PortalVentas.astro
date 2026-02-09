@@ -1,14 +1,14 @@
 ---
-import PaymentPanel from '../components/PaymentPanel.astro';
-import SalesForm from '../components/SalesForm.astro';
-import SalesTable from '../components/SalesTable.astro';
-import ClienteForm from '../components/ClienteForm.astro';
-import PagosView from '../components/PagosView.astro';
+import PaymentPanel from '../components/PortalStore/PaymentPanel.astro';
+import SalesForm from '../components/PortalStore/SalesForm.astro';
+import SalesTable from '../components/PortalStore/SalesTable.astro';
+import ClienteForm from '../components/PortalStore/ClienteForm.astro';
+import PagosView from '../components/PortalStore/PagosView.astro';
 import Layout from '../layouts/Layout.astro';
-import Tabs from '../components/Tabs.astro';
-import ModalFlotante from '../components/ModalFlotante.astro';
+import Tabs from '../components/PortalStore/Tabs.astro';
+import ModalFlotante from '../components/Flotantes/ModalFlotante.astro';
 import "../styles/main.css";
-import VentasTableClient from '../components/VentasTableClient.astro';
+import VentasTableClient from '../components/PortalStore/VentasTableClient.astro';
 
 type VentaDto = {
   id_venta: number;
