@@ -371,4 +371,12 @@ th, td {
 }
 
 
+ :root {
+    --primary: #00ffe1;
+    --secondary: #00e1ff;
+	  --tercero: #1f8ae7;
+    --text: #0f172a;
+    --muted: #475569;
+  }
+
 
