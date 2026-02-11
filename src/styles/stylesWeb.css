@@ -289,4 +289,79 @@
 }
 
 
+/* estilo about us*/
+
+.about {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: center;
+  gap: 4rem;
+
+  padding: 5rem 6rem;
+  background: #ffffff;
+}
+
+/* IMAGEN */
+.about-image {
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.about-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* TEXTO */
+.about-text h2 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 1.2rem;
+  color: #0f172a;
+}
+
+.about-text p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #475569;
+  margin-bottom: 1.8rem;
+}
+
+/* LISTA CON CHECK */
+.about-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.about-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+
+  font-size: 0.95rem;
+  color: #0f172a;
+  margin-bottom: 0.8rem;
+}
+
+.about-list li::before {
+  content: "✓";
+  color: #1f4fd8;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .about {
+    grid-template-columns: 1fr;
+    padding: 3rem 1.5rem;
+    gap: 2.5rem;
+  }
+
+  .about-text h2 {
+    font-size: 1.9rem;
+  }
+}
+
+
 
