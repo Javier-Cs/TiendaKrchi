@@ -1,7 +1,3 @@
----
-
----
-
 <style>
 .payment {
   max-width: 420px;
@@ -95,8 +91,6 @@ input:focus, select:focus {
 <div class="payment">
   <div class="logo">LOGO</div>
 
-  <label>Fecha de pago:  <input type="date" /></label>
-  <label>Nombre Cliente:  <input type="text" /></label>
 
   <label>
     Nombre del Vendedor: 
@@ -130,37 +124,26 @@ input:focus, select:focus {
 <script is:inline>
   let ventasActuales = [];
 
-
   const totalVentasInput = document.getElementById('total-ventas');
-    const montoTotalInput = document.getElementById('monto-total');
-    const totalPagar = document.getElementById('total-A-Pagar');
-    const efectivo = document.getElementById('efectivo-dado');
-    const vuelto = document.getElementById('vueltoDeDeuda');
-    const totalDeCambio = document.getElementById('totalDeCambio');
-    const botonPagar = document.getElementById('boton-pagar');
+  const montoTotalInput = document.getElementById('monto-total');
+  const totalPagar = document.getElementById('total-A-Pagar');
+  const efectivo = document.getElementById('efectivo-dado');
+  const vuelto = document.getElementById('vueltoDeDeuda');
+  const totalDeCambio = document.getElementById('totalDeCambio');
+  const botonPagar = document.getElementById('boton-pagar');
 
+  function calcularVuelto() {
+    const efectivoValor = Number(efectivo.value || 0);
+    const total = Number(montoTotalInput.value || 0);
 
-    const totalVentas = ventasActuales.length;
-    const montoTotal = ventasActuales.reduce(
-      (sum, v) => sum + Number(v.monto_total_Venta || 0),
-      0
-    );
+    const cambio = Math.max(efectivoValor - total, 0);
+    vuelto.value = cambio.toFixed(2);
+    totalDeCambio.textContent = cambio.toFixed(2);
 
+    botonPagar.disabled = !(ventasActuales.length > 0 && efectivoValor >= total);
+  }
 
-    totalVentasInput.value = totalVentas;
-    montoTotalInput.value = montoTotal.toFixed(2);
-    totalPagar.textContent = montoTotal.toFixed(2);
-
-    const calcularVuelto = () => {
-      const efectivoValor = Number(efectivo.value || 0);
-      const total = Number(montoTotalInput.value || 0);
-      vuelto.value = Math.max(efectivoValor - total, 0).toFixed(2);
-      totalDeCambio.textContent = vuelto.value;
-      botonPagar.disabled = (ventasActuales.length > 0 && efectivoValor >= total)
-    };
-
-    efectivo.oninput = calcularVuelto;
-
+  efectivo.addEventListener('input', calcularVuelto);
 
   window.addEventListener('ventas-seleccionadas-para-pago', (e) => {
     ventasActuales = e.detail || [];
@@ -174,11 +157,66 @@ input:focus, select:focus {
     totalVentasInput.value = totalVentas;
     montoTotalInput.value = montoTotal.toFixed(2);
     totalPagar.textContent = montoTotal.toFixed(2);
-    
 
-    
     calcularVuelto();
   });
+
+  async function registrarPago() {
+    if (ventasActuales.length === 0) return;
+
+    const idCliente = ventasActuales[0].id_cliente;
+    const listaVentas = ventasActuales.map(v => v.id_venta);
+    const efectivoRecibido = Number(efectivo.value || 0);
+    const montoTotal = Number(montoTotalInput.value || 0);
+
+    if (efectivoRecibido < montoTotal) {
+      alert('El efectivo recibido es insuficiente');
+      return;
+    }
+
+    const payload = {
+      id_cliente: idCliente,
+      lista_id_vents: listaVentas,
+      efectivo_recibido: efectivoRecibido,
+      monto_total_Venta: montoTotal
+    };
+
+    try {
+      const res = await fetch(
+        'https://apioper.legumfrutsa.com/Api/RegistrarPago',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error('Error al registrar el pago');
+      }
+
+      await res.json();
+      alert('Pago registrado correctamente');
+
+      // limpiar UI
+      ventasActuales = [];
+      totalVentasInput.value = 0;
+      montoTotalInput.value = '0.00';
+      totalPagar.textContent = '0.00';
+      efectivo.value = '';
+      vuelto.value = '0.00';
+      totalDeCambio.textContent = '0.00';
+      botonPagar.disabled = true;
+
+      window.dispatchEvent(new Event('ventas-pagadas'));
+
+    } catch (err) {
+      console.error(err);
+      alert('❌ Error al procesar el pago');
+    }
+  }
+
+  botonPagar.addEventListener('click', registrarPago);
 </script>
 
 
