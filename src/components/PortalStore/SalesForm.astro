@@ -15,6 +15,20 @@
       </select>
     </label>
 
+    <!-- -->
+    <!--<label>
+      Estado venta
+      <select id="estado">
+        <option value="PAGADO">Pagado</option>
+        <option value="DEUDA">Deuda</option>
+      </select>
+    </label> -->
+    <!--<label>
+      Fecha venta
+      <input id="fecha" type="date" />
+    </label> -->
+
+
     <label>
       Tipo venta
       <select id="tipoVenta">
@@ -36,13 +50,7 @@
     </label>
 
     
-    <label>
-      Estado venta
-      <select id="estado">
-        <option value="PAGADO">Pagado</option>
-        <option value="DEUDA">Deuda</option>
-      </select>
-    </label>
+    
 
     <label>
       Monto total venta
@@ -50,10 +58,7 @@
     </label>
 
    
-    <label>
-      Fecha venta
-      <input id="fecha" type="date" />
-    </label>
+    
 
     <label>
       Efectivo recibido
@@ -81,7 +86,7 @@
   const guardarVenta = document.getElementById('btn-guardarVenta') as HTMLButtonElement;
 
   const vendedor = document.getElementById('vendedor') as HTMLSelectElement;
-  const estado = document.getElementById('estado') as HTMLSelectElement;
+  //const estado = document.getElementById('estado') as HTMLSelectElement;
   const tipoVenta = document.getElementById('tipoVenta') as HTMLSelectElement;
   const descripcion = document.getElementById('descripcion') as HTMLTextAreaElement;
 
@@ -147,11 +152,11 @@
       id_cliente: Number(clienteid.value),
       descripcion_venta: descripcion.value,
       tipo_venta: tipoVenta.value,
-      estado_venta: estado.value,
+      //estado_venta: estado.value,
       efectivo_recibido: Number(efectivo.value),
       monto_total_Venta: Number(monto.value),
-      monto_vuelto: Number(vuelto.value),
-      fecha_venta: new Date()
+      monto_vuelto: Number(vuelto.value)
+      //fecha_venta: new Date()
     };
 
     if (payload.efectivo_recibido < payload.monto_total_Venta) {

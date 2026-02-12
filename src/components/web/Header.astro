@@ -1,16 +1,15 @@
 <header class="header">
-
   <div class="header-left">
-    <img src="https://javier-cs.github.io/Images-Box-Web/images/image.png" 
-    alt="Logo" 
-    class="logo">
+    <img
+      src="https://javier-cs.github.io/Images-Box-Web/images/image.png"
+      alt="Logo"
+      class="logo"
+    />
+    <span id="fecha" class="clock">Hora: --:--:--</span>
   </div>
 
-  <div class="header-left">
-      <span id="fecha" class="clock"> --:--:--</span>
-    </div>
-
-  <nav class="header-center">
+  <!-- UN SOLO MENÚ -->
+  <nav class="header-nav" id="mobileMenu">
     <a href="#">Home</a>
     <a href="#">Products</a>
     <a href="#">Services</a>
@@ -18,121 +17,210 @@
   </nav>
 
   <div class="header-right">
-    <div class="user">
-      <img src="https://javier-cs.github.io/Images-Box-Web/images/perfil.png" 
-      alt="user">
-      <button class="BotonLogin">▼</button>
-    </div>
-  </div>
+    <button
+      class="user-btn"
+      onclick="window.open('https://legumfrutsa.com/PortalVentas/')"
+      aria-label="Usuario"
+    >
+      <img
+        src="https://javier-cs.github.io/Images-Box-Web/images/logo_circu.png"
+        alt="user"
+      />
+    </button>
 
+    <!-- BOTÓN CON ID -->
+    <button class="menu-btn" id="menuToggle" aria-label="Menu">☰</button>
+  </div>
 </header>
 
 
 <script>
-  document.addEventListener('DOMContentLoaded',()=> {
-    function actualizarHora() {
+document.addEventListener('DOMContentLoaded', () => {
+  // reloj
+  function actualizarHora() {
     const ahora = new Date();
     const hora = ahora.toLocaleTimeString('es-MX', {
       hour: '2-digit',
       minute: '2-digit',
       second: '2-digit'
     });
-
     const reloj = document.getElementById('fecha');
-    if (reloj) {
-      reloj.textContent = `Hora: ${hora}`;
-    }
+    if (reloj) reloj.textContent = `Hora: ${hora}`;
   }
 
   actualizarHora();
   setInterval(actualizarHora, 1000);
 
-  });
+  // menú mobile
+  const menuBtn = document.getElementById('menuToggle');
+  const menu = document.getElementById('mobileMenu');
+
+  if (menuBtn && menu) {
+    menuBtn.addEventListener('click', () => {
+      menu.classList.toggle('open');
+    });
+
+    menu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        menu.classList.remove('open');
+      });
+    });
+  }
+});
 </script>
 
+
+
+
 <style>
-  .header{
-    background: #3b7280;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 2rem;
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: grid !important;
+  min-height: 72px;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+
+  padding: 0.75rem 2rem;
+  background: #0f172a; /* azul oscuro elegante */
+  color: white;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+}
+
+
+
+
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo {
+  height: 48px;
+}
+
+.clock {
+  font-size: 0.85rem;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+
+
+
+.header-nav {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  transition: all .25s ease;
+}
+
+.header-nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  position: relative;
+}
+
+.header-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0;
+  height: 2px;
+  background: #38bdf8;
+  transition: width .25s ease;
+}
+
+.header-nav a:hover::after {
+  width: 100%;
+}
+
+
+
+
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-btn {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+
+  background: rgba(255,255,255,.1);
+  border: none;
+  padding: .4rem .6rem;
+  border-radius: 999px;
+  cursor: pointer;
+  color: white;
+}
+
+.user-btn img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.chevron {
+  font-size: 0.7rem;
+  opacity: .7;
+}
+
+
+.menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+
+
+
+@media (max-width: 768px) {
+  .header {
+    grid-template-columns: auto auto;
+    row-gap: .5rem;
   }
 
-  .header-left{
-    display: flex;
-    align-items: center;
-  }
-
-  .logo{
-    height: 55px;
-  }
-  
-  .header-nav{
-    display: flex;
-    gap: 2rem;
-  }
-
-  .header-nav a{
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-    position: relative;
-  }
-
-  .header-nav a::after{
-    content: "";
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: white;
-    transition: width 0.2s ease;
-   }
-
-   .header-nav a:hover::after{
-    width: 100%;
-   }
-
-   .header-right{
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-   }
-
-   .clock{
-    font-size: 0.9rem;
-    opacity: 0.85;
-
-   }
-
-   .user{
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-   }
-
-   .user img{
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-   }
-
-   .Botonlogin{
-    background: transparent;
-    border: none;
-    color: white;
-    cursor: pointer;
-    font-size: 14px;
-   }
-
-   @media (max-width: 768px) {
   .header-nav {
     display: none;
+    grid-column: 1 / -1;
+
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 0;
+    background: #0f172a;
+  }
+
+  .header-nav.open {
+    display: flex; /* 👈 AQUÍ APARECE */
+  }
+
+  .menu-btn {
+    display: block;
+  }
+
+  .clock {
+    grid-column: 1 / -1;
+    font-size: 0.8rem;
+    opacity: 0.7;
   }
 }
+
+
 
 
 </style>

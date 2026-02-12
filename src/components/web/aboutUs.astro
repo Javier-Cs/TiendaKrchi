@@ -1,25 +1,120 @@
 <section class="about">
-  <div class="about-image">
-    <img
-      src="https://javier-cs.github.io/Images-Box-Web/images/IMG_3.jpg"
-      alt="Nuestro trabajo"
-    />
+  <div class="about-wrapper">
+    <div class="about-image">
+      <img
+        src="https://javier-cs.github.io/Images-Box-Web/images/unnamed%20(2).webp"
+        alt="Nuestro trabajo"
+      />
+    </div>
+
+    <div class="about-text">
+      <h2>Compromiso con la calidad y el detalle</h2>
+
+      <p>
+        En LegumfrutKrchipulla hemos estado al servicio de la comunidad de Guayaquil
+        desde 2019. Hemos crecido ofreciendo productos únicos, manteniendo siempre
+        precios competitivos y atención personalizada.
+      </p>
+
+      <ul class="about-list">
+        <li>Equipo profesional y capacitado.</li>
+        <li>Productos seleccionados con altos estándares de calidad.</li>
+        <li>Cumplimiento y atención cercana a cada cliente.</li>
+      </ul>
+    </div>
   </div>
 
-  <div class="about-text">
-    <h2>Compromiso con la calidad y el detalle</h2>
-
-    <p>
-      En LegumfrutKrchipulla hemos estado al servicio de la comunidad de Guayaquil
-      desde 2019. Hemos crecido ofreciendo productos únicos, manteniendo siempre
-      precios competitivos y atención personalizada.
-    </p>
-
-    <ul class="about-list">
-      <li>Equipo profesional y capacitado.</li>
-      <li>Productos seleccionados con altos estándares de calidad.</li>
-      <li>Cumplimiento y atención cercana a cada cliente.</li>
-    </ul>
-  </div>
+ 
 </section>
+
+
+
+<style>
+ .about {
+  padding: 5rem 6rem;
+  background-color: aliceblue;
+  background-size: cover;
+  background-position: center;
+}
+
+.about-wrapper {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* IMAGEN */
+.about-image {
+  height: 360px;
+}
+
+.about-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 28px;
+}
+
+/* TEXTO */
+.about-text h2 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 1.2rem;
+  color: #0f172a;
+}
+
+.about-text p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #475569;
+  margin-bottom: 1.5rem;
+}
+
+.about-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: .6rem;
+  color: black;
+}
+
+.about-list li::before {
+  content: "✓";
+  color: #2563eb;
+  font-weight: bold;
+  margin-right: .5rem;
+}
+
+
+@media (max-width: 768px) {
+  .about {
+    padding: 3rem 1.5rem;
+  }
+
+  .about-wrapper {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .about-image {
+    height: auto;
+  }
+
+  .about-image img {
+    aspect-ratio: 16 / 10;
+    border-radius: 20px;
+  }
+
+  .about-text h2 {
+    font-size: 1.6rem;
+  }
+}
+
+
+
+
+</style>
 

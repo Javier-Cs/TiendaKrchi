@@ -3,8 +3,8 @@
     <div class="hero-bg"></div>
 
     <div class="hero-image">
-      <img
-        src="https://javier-cs.github.io/Images-Box-Web/images/IMG_2.jpg"
+      <img 
+        src="https://javier-cs.github.io/Images-Box-Web/images/unnamed.webp"
         alt="Productos de calidad"
       />
     </div>
@@ -21,8 +21,101 @@
       dedicación y cuidado.
     </p>
 
-    <button class="hero-btn">
+    <button class="hero-btn" onclick="window.open('https://api.whatsapp.com/send/?phone=0993820112&text=Hola+quiero+realizar+una+compra&type=phone_number&app_absent=0', '_blank')">
       CONTÁCTANOS <span>↗</span>
     </button>
   </div>
 </section>
+
+<style>
+  
+/* estilo de hero*/
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr ;
+  align-items: center;
+  gap: 3rem;
+  padding: 4rem 6rem;
+}
+
+.hero-bg {
+ 
+
+  background-image: url('https://javier-cs.github.io/Images-Box-Web/images/unnamed.webp');
+  background-size: cover;
+  background-position: center;
+
+  filter: blur(8px);
+  transform: scale(1.1); /* 👈 evita bordes cortados */
+  opacity: 0.35;         /* 👈 NO opaca completamente */
+
+  z-index: 0;
+}
+
+.hero-media,
+.hero-text {
+  position: relative;
+  z-index: 1;
+}
+
+
+
+.hero-text p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #000000;
+  max-width: 520px;
+  margin-bottom: 2rem;
+}
+
+.hero-btn {
+  padding: 0.8rem 1.6rem;
+  background: #2f7c8c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* IMAGEN */
+.hero-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 320px;
+}
+
+.hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 28px;
+}
+
+/* estilo de responsive */
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 3rem 1.5rem;
+    gap: 3rem;
+  }
+
+  .hero-bg {
+    top: -20px;
+    left: -20px;
+    width: 100%;
+  }
+
+  .hero-text {
+    max-width: 100%;
+  }
+
+  .hero-text h1 {
+    font-size: 2.1rem;
+  }
+}
+
+
+</style>

@@ -1,10 +1,369 @@
 <section class="reviews">
   <h2>RESEÑAS DE NUESTROS CLIENTES</h2>
 
-  <div class="review-grid">
-    <div class="review"></div>
-    <div class="review"></div>
-    <div class="review"></div>
-    <div class="review"></div>
+  <div class="reviews-layout">
+
+    <!-- 🧱 BLOQUE ESTÁTICO -->
+    <aside class="reviews-summary">
+      <div class="summary-avatar">
+        <img src="https://javier-cs.github.io/Images-Box-Web/images/perfil.png" alt="Business"/>
+      </div>
+      <div class="summary-info">
+        <strong>Legumfrut krchipulla</strong>
+        <div class="stars">★★★★</div>
+        <span>4 reseñas</span>
+      </div>
+    
+      <button id="comoLLega">Como llegar</button>
+    </aside>
+
+    <!-- 🔁 CARRUSEL -->
+    <div class="carousel">
+      <div class="track">
+
+        <!-- Card -->
+        <article class="review">
+          <header>
+            <span class="avatar">C</span>
+            <div>
+              <strong>Carlos Pincay</strong>
+              <div class="stars">★★★★★</div>
+            </div>
+          </header>
+          <p>
+            Muy buena tienda
+          </p>
+        </article>
+
+        <article class="review">
+          <header>
+            <span class="avatar">A</span>
+            <div>
+              <strong>Angel Anchundia</strong>
+              <div class="stars">★★★★★</div>
+            </div>
+          </header>
+          <p>
+            Excelente atención, productos de calidad y precios competitivos. Siempre
+            satisfecho con mis compras.
+          </p>
+        </article>
+
+        <article class="review">
+          <header>
+            <span class="avatar">G</span>
+            <div>
+              <strong>Guido Alfredo Padron Izquierdo</strong>
+              <div class="stars">★★★★★</div>
+            </div>
+          </header>
+          <p>
+            Muy buena tienda, productos de calidad y atención excelente.
+          </p>
+        </article>
+
+        <article class="review">
+          <header>
+            <span class="avatar">A</span>
+            <div>
+              <strong>Andres Roberto Quiñonez Torre</strong>
+              <div class="stars">★★</div>
+            </div>
+          </header>
+          <p>
+            Muy buena tienda, productos de calidad y atención excelente.
+          </p>
+        </article>
+
+        <article class="review">
+          <header>
+            <span class="avatar">C</span>
+            <div>
+              <strong>Carlos Pincay</strong>
+              <div class="stars">★★★★★</div>
+            </div>
+          </header>
+          <p>
+            Muy buena tienda
+          </p>
+        </article>
+
+        <article class="review">
+          <header>
+            <span class="avatar">A</span>
+            <div>
+              <strong>Angel Anchundia</strong>
+              <div class="stars">★★★★★</div>
+            </div>
+          </header>
+          <p>
+            Excelente atención, productos de calidad y precios competitivos. Siempre
+            satisfecho con mis compras.
+          </p>
+        </article>
+
+        <article class="review">
+          <header>
+            <span class="avatar">G</span>
+            <div>
+              <strong>Guido Alfredo Padron Izquierdo</strong>
+              <div class="stars">★★★★★</div>
+            </div>
+          </header>
+          <p>
+            Muy buena tienda, productos de calidad y atención excelente.
+          </p>
+        </article>
+
+        <article class="review">
+          <header>
+            <span class="avatar">A</span>
+            <div>
+              <strong>Andres Roberto Quiñonez Torre</strong>
+              <div class="stars">★★</div>
+            </div>
+          </header>
+          <p>
+            Muy buena tienda, productos de calidad y atención excelente.
+          </p>
+        </article>
+
+        
+
+
+      </div>
+    </div>
+
   </div>
 </section>
+
+<script>
+  const btnComoLLega = document.getElementById('comoLLega');
+  btnComoLLega.addEventListener('click', () => {
+    window.open('https://maps.app.goo.gl/ACedAVVdPfvhTYWk9', '_blank');
+  });
+</script>
+
+<style>
+
+/* estilos para reviews */
+.reviews-layout {
+  display: flex;
+  gap: 2rem;
+  align-items: stretch;
+}
+
+/* 🧱 bloque fijo */
+
+
+
+.reviews {
+  padding: 4rem 1rem;
+  overflow: hidden;
+}
+
+.reviews h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.carousel {
+  overflow: hidden;
+  width: 100%;
+}
+
+.track {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;
+  animation: scroll 40s linear infinite;
+}
+
+.review {
+  min-width: 320px;
+  max-width: 320px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+}
+
+.review header {
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  margin-bottom: .75rem;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #4f46e5;
+  color: white;
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+}
+
+.stars {
+  color: #fbbf24;
+  font-size: .9rem;
+}
+
+.review p {
+  font-size: .9rem;
+  line-height: 1.4;
+  color: #444;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.carousel {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+}
+
+.review {
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+}
+
+.review p {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+.reviews-summary {
+  min-width: 260px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.reviews-summary img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.reviews-summary button {
+  margin-top: auto;
+  padding: .6rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+}
+
+/* 🔁 carrusel */
+.carousel {
+  overflow: hidden;
+  flex: 1;
+}
+
+.track {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;
+  animation: scroll 40s linear infinite;
+}
+
+.carousel:hover .track {
+  animation-play-state: paused;
+}
+
+@media (max-width: 768px) {
+  .reviews-layout {
+    flex-direction: column;
+  }
+
+  .reviews-summary {
+    max-width: 100%;
+  }
+}
+.carousel {
+  overflow: hidden;
+  flex: 1;
+  padding-left: 280px; /* 👈 ancho del summary */
+
+}
+.carousel {
+  overflow: hidden;
+  flex: 1;
+  padding-left: 280px; /* 👈 ancho del summary */
+}
+
+
+.icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+  .summary-avatar{
+    width: 36px;
+    height: 36px;
+    margin: 0;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .summary-avatar img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .reviews-summary {
+  min-width: 260px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* 👈 CENTRA TODO */
+  text-align: center;
+}
+
+.summary-info {
+  margin-top: .5rem;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+
+.reviews-summary button {
+  margin-top: auto;         /* 👈 empuja el botón abajo */
+  width: 100%;
+  padding: .6rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+}
+
+  
+
+</style>
