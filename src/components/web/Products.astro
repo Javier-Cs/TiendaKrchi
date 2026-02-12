@@ -7,35 +7,137 @@
   <div class="product-grid">
     <div class="product-card">
       <div class="icon">
-        🥬
+        <img src="https://javier-cs.github.io/Images-Box-Web/images/comida-sana.png" alt="Verduras Frescas">
       </div>
-      <h3>Productos Frescos</h3>
+      <h3>Verduras y frutas Frescas</h3>
       <p>
         Selección diaria de frutas y verduras frescas, listas para tu mesa.
+          Disfruta de la frescura y el sabor natural en cada bocado.
       </p>
       <a href="#" class="product-link">VER MÁS →</a>
     </div>
 
     <div class="product-card featured">
       <div class="icon">
-        🍎
+        <img src="https://javier-cs.github.io/Images-Box-Web/images/refresco.png" alt="Refrescos">
       </div>
-      <h3>Frutas de Temporada</h3>
+      <h3>Refrescos y jugos</h3>
       <p>
-        Frutas de la mejor temporada con sabor y calidad garantizada.
+        Refrescos naturales y jugos recién exprimidos para tu disfrute.
+        los mejores sabores para acompañar tus comidas o momentos de relax.
       </p>
       <a href="#" class="product-link">VER MÁS →</a>
     </div>
 
     <div class="product-card">
       <div class="icon">
-        🥕
+        <img src="https://javier-cs.github.io/Images-Box-Web/images/comida-y-bebida.png" alt="Verduras Seleccionadas">
       </div>
-      <h3>Verduras Seleccionadas</h3>
+      <h3>Abastos</h3>
       <p>
-        Productos cuidadosamente seleccionados para asegurar frescura.
+        Abastos frescos y de calidad, seleccionados para tu cocina diaria.
+        una variedad de productos esenciales para preparar tus platillos favoritos.
       </p>
       <a href="#" class="product-link">VER MÁS →</a>
     </div>
   </div>
 </section>
+
+<style>
+.icon{
+  align-items: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  width: 36px;
+  margin: 0;
+}
+.icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* estilos para productos */
+/* IMAGEN */
+.products {
+  padding: 4rem 2rem;
+  background: #ffffff;
+  text-align: center;
+}
+
+.products-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.products-subtitle {
+  max-width: 600px;
+  margin: 0 auto 3rem;
+  color: #555;
+  font-size: 1rem;
+}
+
+/* GRID */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* CARD */
+.product-card {
+  background: #f1f1f1;
+  border-radius: 28px;
+  padding: 2.5rem 2rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card.featured {
+  background: #f8fbff;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* ICON */
+
+
+/* TEXT */
+.product-card h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+}
+
+.product-card p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+/* LINK */
+.product-link {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1f4fd8;
+  text-decoration: none;
+}
+
+.product-link:hover {
+  text-decoration: underline;
+}
+
+
+/*version movill*/
+@media (max-width: 900px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

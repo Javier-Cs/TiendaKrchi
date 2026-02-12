@@ -3,42 +3,137 @@
 
   <div class="social-links">
     <a
-      href="https://wa.me/XXXXXXXXXX"
+      href="https://api.whatsapp.com/send/?phone=0993820112&text=Hola+quiero+realizar+una+compra&type=phone_number&app_absent=0"
       target="_blank"
       class="social-btn whatsapp"
       aria-label="WhatsApp"
     >
-      <span class="icon">💬</span>
+      <img src="https://javier-cs.github.io/Images-Box-Web/images/whatsapp.png" alt="whatsapp" class="icon" />
       WhatsApp
     </a>
 
     <a
-      href="https://www.tiktok.com"
+      href="https://t.me/krchipulla"
       target="_blank"
-      class="social-btn tiktok"
-      aria-label="TikTok"
+      class="social-btn telegram"
+      aria-label="Telegram"
     >
-      <span class="icon">🎵</span>
-      TikTok
+      <img src="https://javier-cs.github.io/Images-Box-Web/images/telegrama.png" alt="telegram" class="icon" />
+      Telegram
     </a>
 
     <a
-      href="https://www.instagram.com"
+      href="https://www.facebook.com/Legumfrutkrchipulla?locale=es_LA"
       target="_blank"
-      class="social-btn instagram"
-      aria-label="Instagram"
+      class="social-btn facebook"
+      aria-label="Facebook"
     >
-      <span class="icon">📷</span>
-      Instagram
+        <img src="https://javier-cs.github.io/Images-Box-Web/images/facebook.png" alt="facebook" class="icon" />
+      Facebook
     </a>
 
     <a
-      href="mailto:correo@ejemplo.com"
+      href="mailto:info@legumfrutsa.com"
       class="social-btn mail"
       aria-label="Email"
     >
-      <span class="icon">✉️</span>
+      <img src="https://javier-cs.github.io/Images-Box-Web/images/gmail.png" alt="mail" class="icon" />
       Mail
     </a>
   </div>
 </section>
+
+
+
+<style>
+  /* estilos para redes sociales */
+.social {
+  padding: 3rem 1.5rem;
+  background: #ffffff;
+}
+
+.social-title {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+  color: #0f172a;
+}
+
+.social-links {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* BOTÓN BASE */
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .75rem;
+
+  padding: .9rem 1rem;
+  border-radius: 14px;
+
+  font-size: .95rem;
+  font-weight: 600;
+  text-decoration: none;
+
+  color: white;
+  background: #111;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.social-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.15);
+}
+
+/* ICONO */
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+
+/* COLORES */
+.whatsapp { background: #22c55e; }
+.telegram { background: #229ed9; }
+.facebook { background: #1877f2; }
+.mail {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .social-links {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+.social-btn:hover {
+  filter: brightness(1.05);
+}
+
+@media (max-width: 380px) {
+  .social-btn {
+    justify-content: center;
+  }
+
+  .social-btn span {
+    display: none;
+  }
+}
+
+
+
+
+
+</style>
