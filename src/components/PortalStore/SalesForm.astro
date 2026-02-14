@@ -84,6 +84,8 @@
   const efectivo = document.getElementById('efectivo') as HTMLInputElement;
   const vuelto = document.getElementById('vuelto') as HTMLInputElement;
   const guardarVenta = document.getElementById('btn-guardarVenta') as HTMLButtonElement;
+  const limpiarVenta = document.getElementById('btn-limpiarVenta') as HTMLButtonElement;
+  const cancelarVenta = document.getElementById('btn-cancelarVenta') as HTMLButtonElement;
 
   const vendedor = document.getElementById('vendedor') as HTMLSelectElement;
   //const estado = document.getElementById('estado') as HTMLSelectElement;
@@ -186,4 +188,25 @@
       alert('Error al registrar la venta');
     }
   });
+
+  cancelarVenta.addEventListener('click', () => {
+    if (confirm('¿Está seguro de cancelar esta venta? Se perderán los datos ingresados.')) {
+      limpiarVenta.click();
+    }
+  });
+
+
+  limpiarVenta.addEventListener('click', () => {
+  clienteid.value = "";   // limpiar el hidden correcto
+  descripcion.value = '';
+  monto.value = '';
+  efectivo.value = '';
+  vuelto.value = '';
+  buscarCliente.value = '';
+  vendedor.selectedIndex = 0;
+  tipoVenta.selectedIndex = 0;
+  lista.innerHTML = "";   // limpiar resultados de búsqueda
+});
+
+
 </script>
