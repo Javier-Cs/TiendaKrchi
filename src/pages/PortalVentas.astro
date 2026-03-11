@@ -10,6 +10,7 @@ import ModalFlotante from '../components/Flotantes/ModalFlotante.astro';
 import VentaProductos from '../components/PortalStore/VentaProductos.astro';
 import "../styles/main.css";
 import VentasTableClient from '../components/PortalStore/VentasTableClient.astro';
+import PanelPagoventa from '../components/PortalStore/PanelPagoVentPro.astro';
 
 type VentaDto = {
   id_venta: number;
@@ -27,6 +28,14 @@ type ClienteDto = {
   tipo: string;
   estado: boolean;
   fecha_creacion: string;
+};
+
+type VentaProduDto={
+  codeProdu: string;
+  nombre_producto: string;
+  unidades: number;
+  precio_unitario: number;
+  precio_final: number;
 };
 
 
@@ -113,6 +122,16 @@ const columnasDeudas: Column<VentaDto>[] = [
 ];
 
 
+const ColumnasVentaProductos: Column<VentaProduDto>[] = [
+  {label: 'CodeProduct', field:'codeProdu'},
+  {label: 'Nombre producto', field:'nombre_producto'},
+  {label:'# Unidades', field:'unidades'},
+  {label:'Precio unidad', field:'precio_unitario'},
+  {label:'TOTAL', field:'precio_final'}
+
+];
+
+
 ---
 
 <Layout>
@@ -175,7 +194,19 @@ const columnasDeudas: Column<VentaDto>[] = [
 
         <div data-tab="venderproducto" class="tab-panel">
           <VentaProductos/>
+          <div class="pagos-layout">
+            <div class="pagos-tabla">
+              <SalesTable
+                columns={ColumnasVentaProductos}
+                rows={[]}
+                keyField={"codeProdu"}
+              />
 
+            </div>
+            <aside class="pagos-panel">
+              <PanelPagoventa/>
+            </aside>
+          </div>
         </div>
 
         

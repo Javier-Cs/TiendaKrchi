@@ -1,0 +1,220 @@
+<style>
+.payment {
+  max-width: 420px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #f9fafb;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.12);
+  font-family: system-ui, sans-serif;
+}
+
+.logo {
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.4rem;
+  padding: 1rem;
+  background: #e5e7eb;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  margin-bottom: .8rem;
+}
+
+label {
+  font-size: .85rem;
+  color: #374151;
+}
+
+input, select {
+  padding: .5rem .6rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: .9rem;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .75rem;
+  margin: 1rem 0;
+  background: #eef2ff;
+  border-radius: 10px;
+  font-weight: 600;
+  color: #1e3a8a;
+  font-size: 20px;
+}
+
+.totalVuelto {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .40rem;
+  background: #ffeeee;;
+  border-radius: 10px;
+  font-weight: 600;
+  color: #ff070f;
+  font-size: 15px;
+}
+
+.btn.pay {
+  width: 100%;
+  padding: .8rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+
+.btn.pay:hover {
+  background: #1d4ed8;
+}
+
+
+</style>
+
+<div class="payment">
+  <div class="logo">LOGO</div>
+
+
+  <label>
+    Nombre del Vendedor: 
+    <select>
+      <option value="Don Maximo">Don Maximo</option>
+      <option value="Scarlet">Scarlet</option>
+      <option value="Jean">Jean</option>
+      <option value="Jhon">Jhon</option>
+    </select>
+  </label>
+
+  <label>Num de venta: <input id="total-ventas" type="number" readonly/></label>
+  <label>Efectivo recibido: <input type="number" id="efectivo-dado" /></label>
+
+
+  <div class="totalVuelto">
+    Vuelto: $
+    <span id="totalDeCambio">0.00</span>
+  </div>
+
+  <div class="total">
+    Total a pagar: $
+    <span id="total-A-Pagar">0.00</span>
+  </div>
+
+  <button id="boton-pagar" class="btn pay" disabled>PAGAR</button>
+</div>
+
+<script is:inline>
+  let ventasActuales = [];
+
+  const totalVentasInput = document.getElementById('total-ventas');
+  const montoTotalInput = document.getElementById('monto-total');
+  const totalPagar = document.getElementById('total-A-Pagar');
+  const efectivo = document.getElementById('efectivo-dado');
+  const vuelto = document.getElementById('vueltoDeDeuda');
+  const totalDeCambio = document.getElementById('totalDeCambio');
+  const botonPagar = document.getElementById('boton-pagar');
+
+  function calcularVuelto() {
+    const efectivoValor = Number(efectivo.value || 0);
+    const total = Number(montoTotalInput.value || 0);
+
+    const cambio = Math.max(efectivoValor - total, 0);
+    vuelto.value = cambio.toFixed(2);
+    totalDeCambio.textContent = cambio.toFixed(2);
+
+    botonPagar.disabled = !(ventasActuales.length > 0 && efectivoValor >= total);
+  }
+
+  efectivo.addEventListener('input', calcularVuelto);
+
+  window.addEventListener('ventas-seleccionadas-para-pago', (e) => {
+    ventasActuales = e.detail || [];
+
+    const totalVentas = ventasActuales.length;
+    const montoTotal = ventasActuales.reduce(
+      (sum, v) => sum + Number(v.monto_total_Venta || 0),
+      0
+    );
+
+    totalVentasInput.value = totalVentas;
+    montoTotalInput.value = montoTotal.toFixed(2);
+    totalPagar.textContent = montoTotal.toFixed(2);
+
+    calcularVuelto();
+  });
+
+  async function registrarPago() {
+    if (ventasActuales.length === 0) return;
+
+    const idCliente = ventasActuales[0].id_cliente;
+    const listaVentas = ventasActuales.map(v => v.id_venta);
+    const efectivoRecibido = Number(efectivo.value || 0);
+    const montoTotal = Number(montoTotalInput.value || 0);
+
+    if (efectivoRecibido < montoTotal) {
+      alert('El efectivo recibido es insuficiente');
+      return;
+    }
+
+    const payload = {
+      id_cliente: idCliente,
+      lista_id_vents: listaVentas,
+      efectivo_recibido: efectivoRecibido,
+      monto_total_Venta: montoTotal
+    };
+
+    try {
+      const res = await fetch(
+        'https://apioper.legumfrutsa.com/Api/RegistrarPago',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error('Error al registrar el pago');
+      }
+
+      await res.json();
+      alert('Pago registrado correctamente');
+
+      // limpiar UI
+      ventasActuales = [];
+      totalVentasInput.value = 0;
+      montoTotalInput.value = '0.00';
+      totalPagar.textContent = '0.00';
+      efectivo.value = '';
+      vuelto.value = '0.00';
+      totalDeCambio.textContent = '0.00';
+      botonPagar.disabled = true;
+
+      window.dispatchEvent(new Event('ventas-pagadas'));
+
+    } catch (err) {
+      console.error(err);
+      alert('❌ Error al procesar el pago');
+    }
+  }
+
+  botonPagar.addEventListener('click', registrarPago);
+</script>
+
+
