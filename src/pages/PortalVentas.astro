@@ -7,6 +7,7 @@ import PagosView from '../components/PortalStore/PagosView.astro';
 import Layout from '../layouts/Layout.astro';
 import Tabs from '../components/PortalStore/Tabs.astro';
 import ModalFlotante from '../components/Flotantes/ModalFlotante.astro';
+import VentaProductos from '../components/PortalStore/VentaProductos.astro';
 import "../styles/main.css";
 import VentasTableClient from '../components/PortalStore/VentasTableClient.astro';
 
@@ -155,23 +156,36 @@ const columnasDeudas: Column<VentaDto>[] = [
 				
 				<div data-tab="pagos" class="tab-panel">
 					<PagosView/>
-          <div>
-            <VentasTableClient
-              columns={columnasDeudas}
-              rows={[]}
-              keyField="id_venta"
-              selectable={true}
-            />
+          <div class="pagos-layout">
+            <div class="pagos-tabla">
+              <VentasTableClient
+                columns={columnasDeudas}
+                rows={[]}
+                keyField="id_venta"
+                selectable={true}
+              />
+            </div>
+
+            <aside class="pagos-panel">
+              <PaymentPanel/>
+            </aside>
           </div>
-					
+
 				</div>
+
+        <div data-tab="venderproducto" class="tab-panel">
+          <VentaProductos/>
+
+        </div>
+
+        
 			</section>
 			
 		</section>
 		
-		<aside class="right">
+		<!-- <aside class="right">
 			<PaymentPanel/>
-		</aside>
+		</aside>-->
 	</main>
 </Layout>
 

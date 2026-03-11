@@ -9,23 +9,13 @@ body {
   background: #ececec;
 }
 
-.header {
-  height: 40px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 0 1rem;
-  background: #e6e6e6;
-  font-size: 14px;
-}
+
 
 .layout {
-  display: flex;
-  gap: 1rem;
-  padding: 1rem;
-
-  height: calc(100vh - 40px);
-  box-sizing: border-box;
+  display:flex;
+  gap:1rem;
+  padding:1rem;
+  min-height:calc(100vh - 40px);
 }
 
 .left {
@@ -40,7 +30,6 @@ body {
 }
 
 .right {
-  flex: 1;
   background: #819399;
   border-radius: 10px;
   padding: 1rem;
@@ -49,6 +38,24 @@ body {
   flex-direction: column;
   justify-content: space-between;
   
+}
+
+.pagos-layout{
+  display:flex;
+  gap:20px;
+  align-items:flex-start;
+}
+
+.pagos-tabla{
+  flex:1;
+  min-width: 600px;
+}
+
+.pagos-panel{
+  width:340px;
+  flex-shrink: 0;
+  display:flex;
+  justify-content:center;
 }
 
 .tabs {
@@ -116,15 +123,6 @@ body {
   resize: none;
 }
 
-.table-wrapper {
-  flex: 1;              /*  CLAVE */
-  overflow: auto;
-  margin-top: 1rem;
-  background: #fcfcfc;
-  border-radius: 8px;
-  padding: .5rem;
-  overflow: auto;
-}
 
 table {
   width: 100%;
@@ -224,15 +222,15 @@ th, td {
 .table-row:hover {
   background: rgba(234, 39, 59, 0.707);
 }
-.table-wrapper {
-  flex: 1;                 /* ocupa el espacio restante del panel */
-  max-height: 350px;       /* AJUSTA según tu diseño */
-  overflow-y: auto;        /* scroll vertical */
-  overflow-x: hidden;
 
-  background: #ffffff;
+
+.table-wrapper {
+  margin-top: 1rem;
+  background: #fcfcfc;
   border-radius: 8px;
   padding: .5rem;
+  overflow-x: auto;
+  overflow-y: auto;
 }
 
 
@@ -328,9 +326,7 @@ th, td {
 }
 
 @media (max-width: 768px) {
-  .table-wrapper {
-    overflow-x: auto;
-  }
+  
 
   table {
     min-width: 700px;
@@ -378,5 +374,33 @@ th, td {
     --text: #0f172a;
     --muted: #475569;
   }
+
+
+@media (max-width:768px){
+
+  .layout{
+    flex-direction:column;
+  }
+
+  .pagos-layout{
+    flex-direction:column;
+    gap:15px;
+  }
+
+  .pagos-tabla{
+    min-width:0;   /* CLAVE */
+    width:100%;
+  }
+  table{
+    min-width:450px;
+  }
+
+  .pagos-panel{
+    width:100%;
+    display:flex;
+    justify-content:center;
+  }
+
+}
 
 
