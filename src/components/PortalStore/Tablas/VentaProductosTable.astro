@@ -1,0 +1,134 @@
+---
+interface Column<T = any> {
+  label: string;
+  field?: keyof T;
+  render?: (row: T) => string | number;
+  class?: string;
+}
+
+interface Props<T = any> {
+  columns: Column<T>[];
+  rows: T[];
+  keyField?: keyof T;
+  selectable?: boolean;
+}
+
+const {
+  columns = [],
+  rows = [],
+  keyField = 'id',
+  selectable = false
+} = Astro.props as Props;
+---
+
+<div class="table-wrapper">
+  <table class="data-table">
+    
+    <thead>
+      <tr>
+        {selectable && <th></th>}
+        {columns.map(col => (
+          <th class={col.class}>{col.label}</th>
+        ))}
+      </tr>
+    </thead>
+
+    <tbody>
+
+      {Array.isArray(rows) && rows.length > 0 ? (
+
+        rows.map(row => (
+          <tr
+            class="table-row"
+            data-id={row[keyField]}
+          >
+
+            {selectable && (
+              <td>
+                <input
+                  type="checkbox"
+                  value={row[keyField]}
+                />
+              </td>
+            )}
+
+            {columns.map(col => (
+
+              <td class={col.class}>
+
+                {col.render ? (
+                  <span set:html={col.render(row)} />
+                ) : col.field ? (
+                  row[col.field]
+                ) : ''}
+
+              </td>
+
+            ))}
+
+          </tr>
+        ))
+
+      ) : (
+
+        <tr>
+          <td colspan={columns.length + (selectable ? 1 : 0)}>
+            Sin datos
+          </td>
+        </tr>
+
+      )}
+
+    </tbody>
+
+  </table>
+</div>
+
+
+
+
+<script>
+
+    const columns = [
+    {
+        label: "",
+        class: "col-remove",
+        render: (row) =>
+        `<button class="btnEliminar" data-id="${row.id}">X</button>`
+    },
+
+    {
+        label: "Código",
+        field: "codigo"
+    },
+
+    {
+        label: "Producto",
+        field: "nombre"
+    },
+
+    {
+        label: "Cant",
+        render: (row) => `
+        <input
+            type="number"
+            class="cantidad"
+            data-id="${row.id}"
+            value="${row.cantidad}"
+            min="1"
+        >
+        `
+    },
+
+    {
+        label: "Precio",
+        field: "precio"
+    },
+
+    {
+        label: "Total",
+        render: (row) =>
+        (row.precio * row.cantidad).toFixed(2)
+    }
+];
+</script>

@@ -31,7 +31,7 @@
 
     <label>
       Tipo venta
-      <select id="tipoVenta">
+      <select id="tipoVenta" class="selector">
         <option value="CONTADO">Contado</option>
         <option value="CREDITO">Crédito</option>
       </select>
@@ -39,14 +39,14 @@
 
     <label>
       Buscar cliente
-      <input id="buscarCliente" type="text"  placeholder="Escriba el nombre del cliente.."/>
+      <input id="buscarCliente" type="text"  placeholder="Escriba el nombre del cliente.." class="colorinput"/>
       <input type="hidden" id="clienteid">
       <div id="listaClientes" class="autocomplete"></div>
     </label>
 
     <label class="full">
       Descripción venta
-      <textarea id="descripcion"></textarea>
+      <textarea id="descripcion" class="colorinput"></textarea>
     </label>
 
     
@@ -54,7 +54,7 @@
 
     <label>
       Monto total venta
-      <input id="monto" type="number" step="0.01" />
+      <input id="monto" type="number" step="0.01" class="colorinput2"/>
     </label>
 
    
@@ -62,7 +62,7 @@
 
     <label>
       Efectivo recibido
-      <input id="efectivo" type="number" step="0.01" />
+      <input id="efectivo" type="number" step="0.01" class="colorinput3"/>
     </label>
 
     <div class="actions-left">
@@ -73,10 +73,13 @@
 
     <label class="vuelto">
       Vuelto
-      <input id="vuelto" type="number" disabled />
+      <input id="vuelto" type="number" disabled class="selector2"/>
     </label>
   </div>
 </div>
+<style>
+  .
+</style>
 
 <script>
   const idcliente = document.getElementById('idcliente') as HTMLInputElement;

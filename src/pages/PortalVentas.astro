@@ -1,16 +1,17 @@
 ---
-import PaymentPanel from '../components/PortalStore/PaymentPanel.astro';
-import SalesForm from '../components/PortalStore/SalesForm.astro';
-import SalesTable from '../components/PortalStore/SalesTable.astro';
-import ClienteForm from '../components/PortalStore/ClienteForm.astro';
-import PagosView from '../components/PortalStore/PagosView.astro';
+import PaymentPanel from '../components/PortalStore/Paneles/PaymentPanel.astro';
+import SalesForm from '../components/PortalStore/Formularios/SalesForm.astro';
+import SalesTable from '../components/PortalStore/Tablas/SalesTable.astro';
+import ClienteForm from '../components/PortalStore/Formularios/ClienteForm.astro';
+import PagosView from '../components/PortalStore/Formularios/PagosViewForm.astro';
 import Layout from '../layouts/Layout.astro';
 import Tabs from '../components/PortalStore/Tabs.astro';
 import ModalFlotante from '../components/Flotantes/ModalFlotante.astro';
-import VentaProductos from '../components/PortalStore/VentaProductos.astro';
+import VentaProductos from '../components/PortalStore/Formularios/VentaProductosForm.astro';
 import "../styles/main.css";
-import VentasTableClient from '../components/PortalStore/VentasTableClient.astro';
-import PanelPagoventa from '../components/PortalStore/PanelPagoVentPro.astro';
+import VentasTableClient from '../components/PortalStore/Tablas/VentasClientTable.astro';
+import PanelPagoventa from '../components/PortalStore/Paneles/PagoVentProducPanel.astro';
+import VentaProductoSaleTable from '../components/PortalStore/Tablas/VentaProductosTable.astro';
 
 type VentaDto = {
   id_venta: number;
@@ -196,7 +197,7 @@ const ColumnasVentaProductos: Column<VentaProduDto>[] = [
           <VentaProductos/>
           <div class="pagos-layout">
             <div class="pagos-tabla">
-              <SalesTable
+              <VentaProductoSaleTable
                 columns={ColumnasVentaProductos}
                 rows={[]}
                 keyField={"codeProdu"}

@@ -30,7 +30,7 @@ body {
 }
 
 .right {
-  background: #819399;
+  background: #2e738a;
   border-radius: 10px;
   padding: 1rem;
 
@@ -66,17 +66,17 @@ body {
 .tab {
   padding: .5rem 1rem;
   border: none;
-  background: #ccc;
+  background: #1981e3;
   cursor: pointer;
 }
 
 .tab.active {
-  background: #fff;
+  background: #e54646;
   font-weight: bold;
 }
 
 .form {
-  background: #ffffff;
+  background: #cd9f33;
   margin-top: 1rem;
   padding: 1rem;
   border-radius: 6px;
@@ -114,7 +114,7 @@ body {
   height: 28px;
   padding: 0 .5rem;
   border-radius: 4px;
-  border: 1px solid #999;
+  border: 1px solid #000000;
   font-size: 13px;
 }
 
@@ -130,7 +130,7 @@ table {
 }
 
 th, td {
-  border: 1px solid #999;
+  border: 1px solid #b11111;
   padding: .25rem;
   text-align: center;
 }
@@ -226,7 +226,7 @@ th, td {
 
 .table-wrapper {
   margin-top: 1rem;
-  background: #fcfcfc;
+  background: #ffffff;
   border-radius: 8px;
   padding: .5rem;
   overflow-x: auto;
@@ -273,8 +273,9 @@ th, td {
 }
 
 .table-wrapper tbody tr:hover {
-  background-color: #f80c76; /* azul suave */
+  background-color: #2be6d6; /* azul suave */
 }
+
 
 
 <!---->
@@ -373,6 +374,10 @@ th, td {
 	  --tercero: #1f8ae7;
     --text: #0f172a;
     --muted: #475569;
+    --select: #e450ab;
+    --imput6: #4fbbe9;
+    --imput7: #bec10a;
+    --imput8: #37ed5c;
   }
 
 
@@ -401,6 +406,27 @@ th, td {
     justify-content:center;
   }
 
+}
+
+
+/*estilos de los campos */
+.selector {
+  background-color: var(--select);
+}
+.selector2 {
+  background-color: var(--tercero);
+}
+
+.colorinput{
+  background-color: var(--imput6);
+}
+
+.colorinput2{
+  background-color: var(--imput8);
+}
+
+.colorinput3{
+  background-color: var(--imput7);
 }
 
 
