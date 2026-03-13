@@ -12,10 +12,12 @@ import "../styles/main.css";
 import VentasTableClient from '../components/PortalStore/Tablas/VentasClientTable.astro';
 import PanelPagoventa from '../components/PortalStore/Paneles/PagoVentProducPanel.astro';
 import VentaProductoSaleTable from '../components/PortalStore/Tablas/VentaProductosTable.astro';
+import VentasPorFechaForm from '../components/PortalStore/Formularios/VentasPorFechaForm.astro';
 
 type VentaDto = {
   id_venta: number;
   id_cliente: number;
+  nombre_cliente:  string;
   nombre_vendedor: string;
   tipo_venta: string;
   estado_venta: string;
@@ -100,6 +102,7 @@ const columnasDeudas: Column<VentaDto>[] = [
   //{ label: 'Selec T.', field: 'id_venta' },
   { label: 'ID Venta', field: 'id_venta' },
   { label: 'ID Cliente', field: 'id_cliente' },
+  {label: 'Nombre Cliente', field:'nombre_cliente'},
   { label: 'Vendedor', field: 'nombre_vendedor' },
   { label: 'Tipo', field: 'tipo_venta' },
   { label: 'Estado', field: 'estado_venta' },
@@ -150,6 +153,7 @@ const ColumnasVentaProductos: Column<VentaProduDto>[] = [
 	<main class="layout">
 		<section class="left">
 			<Tabs/>
+
 			<section>
 				<div data-tab="vender" class="tab-panel active">
 					<SalesForm/>
@@ -210,7 +214,25 @@ const ColumnasVentaProductos: Column<VentaProduDto>[] = [
           </div>
         </div>
 
-        
+
+
+        <div data-tab="ventasPorFecha" class="tab-panel">
+          <VentasPorFechaForm/>
+          <div class="pagos-layout">
+            <div class="pagos-tabla">
+              <VentasTableClient
+                columns={columnasDeudas}
+                rows={[]}
+                keyField="id_venta"
+                selectable={true}
+              />
+            </div>
+
+            <aside class="pagos-panel">
+              <PaymentPanel/>
+            </aside>
+          </div>
+        </div>
 			</section>
 			
 		</section>

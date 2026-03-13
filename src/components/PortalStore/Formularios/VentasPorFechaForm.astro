@@ -1,0 +1,35 @@
+<div class="form">
+  <div class="form-grid">
+
+    <label>
+      Fecha de busqueda
+      <input id="fecha" type="date"  class="colorinput"/>
+    </label>
+
+    <label>
+      Incluir Cliente a la busqueda
+      <input type="text" id="ibuscarIdDeudor" placeholder="Escriba el nombre del cliente..">
+      <input id="idclienteDeuda" type="hidden"/>
+      <div id="listaDeDeudores" class="autocompletardeudores"></div>
+    </label>
+
+    
+
+
+    <label>
+      Incluir Tipo venta
+      <select id="tipoVntRev">
+        <option value="CREDITO">Crédito</option>
+        <option value="CONTADO">Contado</option>
+        
+      </select>
+    </label>
+
+    
+
+
+    <div class="actions-left">
+    <button id="btn-cancelar" class="btn cancel">CANCELAR</button>
+    <button id="btn-buscar" class="btn buscar">BUSCAR DEUDA</button>
+    </div>
+</div>
