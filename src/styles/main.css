@@ -3,10 +3,12 @@ html, body {
   margin: 0;
   background: #e6e6e6;
   font-family: Arial, sans-serif;
+  padding: 0%;
 }
 
 body {
   background: #ececec;
+  padding: auto;
 }
 
 
@@ -20,7 +22,7 @@ body {
 
 .left {
   flex: 3;
-  background: #819399;
+  background: #1d7fa3;
   border-radius: 10px;
   padding: 1rem;
 
@@ -64,19 +66,43 @@ body {
 }
 
 .tab {
-  padding: .5rem 1rem;
-  border: none;
-  background: #1981e3;
-  cursor: pointer;
+  padding: .6rem 1.2rem;
+  border-radius: 6px 6px 0 0;
+  border: 1px solid #ccc;
+  background: #06ff0e;
+  
+}
+
+.tab:hover {
+  /*background: #ebad9a;*/
+  transform: translateY(-2px);
+}
+
+.color1 {
+  background: #56d2ff;
+  /*color: #fff;*/
+}
+
+.color2 {
+  background: #f5c802;
+  color: #333;
+}
+
+.colorCre {
+  background: #5adc19;
+  /*color: #fff;*/
 }
 
 .tab.active {
   background: #e54646;
+  color: #fff;
   font-weight: bold;
+  border-bottom: 2px solid #e54646;
 }
 
+
 .form {
-  background: #cd9f33;
+  background: #d4cf49;
   margin-top: 1rem;
   padding: 1rem;
   border-radius: 6px;
@@ -136,7 +162,7 @@ th, td {
 }
 
 .payment {
-  background: #d6d28a;
+  background: #d8cf24;
   padding: 1rem;
   border-radius: 8px;
   display: flex;
@@ -376,7 +402,7 @@ th, td {
     --muted: #475569;
     --select: #e450ab;
     --imput6: #4fbbe9;
-    --imput7: #bec10a;
+    --imput7: #e3e641;
     --imput8: #37ed5c;
   }
 
