@@ -12,7 +12,7 @@
 
     <label>
       Estado venta
-      <select id="estadoVntaRev">
+      <select id="estadoVntaRev" class="colorinput2">
         <option value="DEUDA">Deuda</option>
         <option value="PAGADO">Pagado</option>
         
@@ -22,7 +22,7 @@
 
     <label>
       Tipo venta
-      <select id="tipoVntRev">
+      <select id="tipoVntRev" class="colorinput">
         <option value="CREDITO">Crédito</option>
         <option value="CONTADO">Contado</option>
 
@@ -50,6 +50,11 @@ import { literal } from "astro/zod";
   const ListaDeudores = document.getElementById('listaDeDeudores') as HTMLDivElement
   let timeOut2 = null;
 
+
+  //focalizar
+  window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('ibuscarIdDeudor').focus();
+  });
 
 
   BuscarDeudortxt.addEventListener("input", e => {
@@ -92,6 +97,10 @@ import { literal } from "astro/zod";
     });
   }
 
+
+  window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('ibuscarIdDeudor').focus();
+  });
 
   btnBuscarDeuda.addEventListener('click', async (e) =>{
 
