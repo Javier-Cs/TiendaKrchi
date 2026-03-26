@@ -118,13 +118,13 @@ import { date } from "astro:schema";
           
         );
 
-        // se recuperan los datosd obtenidos 
-        const data = await rest.json();
-
         if(!rest.ok){
           const error = await rest.text();
           throw new Error(error);
         }
+        // se recuperan la lista de datos obtenidos 
+        const data = await rest.json();
+        window.dispatchEvent(new CustomEvent('ventas-obtenidas',{detail: data}))
         
 
       }catch(err){

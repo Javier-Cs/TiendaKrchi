@@ -14,41 +14,13 @@ import PanelPagoventa from '../components/PortalStore/Paneles/PagoVentProducPane
 import VentaProductoSaleTable from '../components/PortalStore/Tablas/VentaProductosTable.astro';
 import VentasPorFechaForm from '../components/PortalStore/Formularios/VentasPorFechaForm.astro';
 
-type VentaDto = {
-  id_venta: number;
-  id_cliente: number;
-  nombre_cliente:  string;
-  nombre_vendedor: string;
-  tipo_venta: string;
-  estado_venta: string;
-  monto_total_Venta: number;
-  fecha_venta: string;
-};
-
-type ClienteDto = {
-  id_cliente: number;
-  nombre: string;
-  tipo: string;
-  estado: boolean;
-  fecha_creacion: string;
-};
-
-type VentaProduDto={
-  codeProdu: string;
-  nombre_producto: string;
-  unidades: number;
-  precio_unitario: number;
-  precio_final: number;
-};
+//importacion de tipos
+import type{ ClienteDto } from '@/types/cliente';
+import type { VentaDto } from '@/types/venta';
+import type { Column } from '@/types/tablas';
 
 
-type Column<T> = {
-  label: string;
-  field?: keyof T;
-  render?: (row: T) => string;
-};
-
-// ventas table columns
+// ventas realizadas table columns
 const columnasVentas: Column<VentaDto>[] = [
   { label: 'ID Venta', field: 'id_venta' },
   { label: 'ID Cliente', field: 'id_cliente' },
@@ -59,13 +31,13 @@ const columnasVentas: Column<VentaDto>[] = [
     label: 'Fecha',
     field: 'fecha_venta',
     render: (v) => new Date(v.fecha_venta).toLocaleString('es-EC', {
-  timeZone: 'America/Guayaquil',
-  hour: '2-digit',
-  minute: '2-digit',
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit'
-})
+    timeZone: 'America/Guayaquil',
+    hour: '2-digit',
+    minute: '2-digit',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  })
   },
   {
     label: 'Total',
@@ -124,6 +96,9 @@ const columnasDeudas: Column<VentaDto>[] = [
     render: (v) => `$${v.monto_total_Venta.toFixed(2)}`
   }
 ];
+
+
+
 
 
 const ColumnasVentaProductos: Column<VentaProduDto>[] = [
@@ -478,6 +453,7 @@ function recalcularSeleccion() {
   window.addEventListener('cliente-creado', cargarClientes);
   window.addEventListener('ventas-filtradas', e => renderDeudas(e.detail));
   window.addEventListener('ventas-sin-filtro', e => renderDeudas(e.detail));
+  window.addEventListener('ventas-obtenidas', e => renderDeudas(e.detail));
   //recalcularSeleccion();
 
 
