@@ -78,7 +78,7 @@
 
 
 <script>
-  const idcliente = document.getElementById('idcliente') as HTMLInputElement;
+  //const idcliente = document.getElementById('idcliente') as HTMLInputElement;
   const monto = document.getElementById('monto') as HTMLInputElement;
   const efectivo = document.getElementById('efectivo') as HTMLInputElement;
   const vuelto = document.getElementById('vuelto') as HTMLInputElement;
@@ -103,6 +103,7 @@
   });
 
 
+  // funciones para buscar cliente 
   buscarCliente.addEventListener("input",e =>{
     const text = e.target.value;
     if(text.length < 1) {

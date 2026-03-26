@@ -3,14 +3,14 @@
 
     <label>
       Fecha de busqueda
-      <input id="fecha" type="date"  class="colorinput"/>
+      <input id="fecha2" type="date"  class="colorinput"/>
     </label>
 
     <label>
       Incluir Cliente a la busqueda
-      <input type="text" id="ibuscarIdDeudor" placeholder="Escriba el nombre del cliente..">
-      <input id="idclienteDeuda" type="hidden"/>
-      <div id="listaDeDeudores" class="autocompletardeudores"></div>
+      <input type="text" id="buscarClienteDeVenta" placeholder="Escriba el nombre del cliente..">
+      <input id="idventacliente" type="hidden"/>
+      <div id="listaDeClientes" class="autocompletardeudores"></div>
     </label>
 
     
@@ -18,10 +18,10 @@
 
     <label>
       Incluir Tipo venta
-      <select id="tipoVntRev" class="colorinput2">
-        <option value="CREDITO">Crédito</option>
+      <select id="tipoVntRevf" class="colorinput2">
+        <option value="">Elegir</option>
         <option value="CONTADO">Contado</option>
-        
+        <option value="CREDITO">Crédito</option>
       </select>
     </label>
 
@@ -30,6 +30,108 @@
 
     <div class="actions-left">
     <button id="btn-cancelar" class="btn cancel">CANCELAR</button>
-    <button id="btn-buscar" class="btn buscar">BUSCAR DEUDA</button>
+    <button id="btn-buscarVentas" class="btn buscar">BUSCAR VENTAS</button>
     </div>
 </div>
+
+<script>
+import { date } from "astro:schema";
+
+  const fechaventa = document.getElementById('fecha2') as HTMLInputElement;
+  const idCliente = document.getElementById('ibuscarIdDeudor') as HTMLInputElement;
+  const tipoventa2 = document.getElementById('tipoVntRevf') as HTMLSelectElement;
+    
+  const BtnBuscarVentas = document.getElementById('btn-buscarVentas') as HTMLButtonElement;
+  const BtnCancelar = document.getElementById('btn-cancelar') as HTMLButtonElement;
+
+  const buscarCliente = document.getElementById('buscarClienteDeVenta') as HTMLInputElement;
+  const idClienteVentas = document.getElementById('idventacliente') as HTMLInputElement
+  const listaDeVentas = document.getElementById('listaDeClientes') as HTMLInputElement
+  let timeout = null;
+
+
+  //focalizar
+  window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('buscarClienteDeVenta').focus();
+  });
+
+  function mostrarResultadoDeClientes(clientes){
+      listaDeVentas.innerHTML = "";
+      clientes.forEach(c => {
+        const item = document.createElement("div");
+        item.textContent = c.nombre;
+        item.classList.add("item-cliente")
+
+        item.onclick = () => {
+          buscarCliente.value = c.nombre;
+          idClienteVentas.value = c.id_cliente;
+          listaDeVentas.innerHTML = "";
+        };
+        listaDeVentas.appendChild(item);
+      });
+    }
+
+
+    function buscarClientes(text){
+      fetch(`https://apioper.legumfrutsa.com/Api/Cliente/buscar?nombre=${text}`)
+      .then(rest => rest.json())
+      .then(data => mostrarResultadoDeClientes(data))
+      .catch(err => console.error(err));
+
+    }
+
+
+
+    buscarCliente.addEventListener("input", e =>{
+      const text = e.target.value;
+      if(text.length < 1){
+        listaDeVentas.innerHTML = "";
+        return;
+      }
+
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        buscarClientes(text);
+      }, 200);
+    });
+
+    BtnBuscarVentas.addEventListener('click', async (e) => {
+      e.preventDefault();
+      // se asigna fecha por defecto
+      const fechaInput = fechaventa.value
+        ? new Date(fechaventa.value).toISOString()
+        : new Date().toISOString();
+
+      const payload = {
+        fecha_venta: fechaInput,
+        id_cliente: Number(idClienteVentas.value),
+        tipo_venta: tipoventa2.value
+      };
+
+      try{
+        const rest = await fetch(
+          'https://apioper.legumfrutsa.com/FechaVenta',{
+            method: 'POST',
+            headers:{'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+          }
+          
+        );
+
+        // se recuperan los datosd obtenidos 
+        const data = await rest.json();
+
+        if(!rest.ok){
+          const error = await rest.text();
+          throw new Error(error);
+        }
+        
+
+      }catch(err){
+        console.error(err);
+        alert('Error al realizara la consulta');
+      }
+
+    });
+
+</script>
