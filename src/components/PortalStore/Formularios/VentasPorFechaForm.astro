@@ -13,9 +13,6 @@
       <div id="listaDeClientes" class="autocompletardeudores"></div>
     </label>
 
-    
-
-
     <label>
       Incluir Tipo venta
       <select id="tipoVntRevf" class="colorinput2">
@@ -29,9 +26,10 @@
 
 
     <div class="actions-left">
-    <button id="btn-cancelar" class="btn cancel">CANCELAR</button>
-    <button id="btn-buscarVentas" class="btn buscar">BUSCAR VENTAS</button>
+      <button id="btn-cancelar" class="btn cancel">CANCELAR</button>
+      <button id="btn-buscarVentas" class="btn buscar">BUSCAR VENTAS</button>
     </div>
+  </div>
 </div>
 
 <script>
@@ -102,8 +100,10 @@ import { date } from "astro:schema";
         ? new Date(fechaventa.value).toISOString()
         : new Date().toISOString();
 
+        const fechaInput1 = fechaventa.value || new Date().toISOString().split('T')[0];
+
       const payload = {
-        fecha_venta: fechaInput,
+        fecha_venta: fechaInput1,
         id_cliente: Number(idClienteVentas.value),
         tipo_venta: tipoventa2.value
       };
