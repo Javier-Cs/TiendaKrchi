@@ -1,9 +1,11 @@
+import { set } from "astro:schema";
 import { useState, useEffect, useRef } from "react";
 
 export default function AutoCompletarCliente({onSelect}){
     const[texto, setTexto] = useState("");
     const[clientes, setClientes] = useState([]);
     const[loading, setLoading] = useState(false);
+    const[seleccionado, setSeleccionado] = useState(false);
 
     const controllerRef = useRef(null);
     const ref = useRef();
@@ -13,8 +15,9 @@ export default function AutoCompletarCliente({onSelect}){
     }, []);
 
     useEffect(() => {
-        if(texto.length < 1){
-            console.log(" React montado correctamente");
+        if(seleccionado) return;
+
+        if(texto.length < 2){
             setClientes([]);
             return;
         }
@@ -48,7 +51,6 @@ export default function AutoCompletarCliente({onSelect}){
 
 
             const data = await res.json();
-            console.log("DATA API:", data);
             setClientes(Array.isArray(data) ? data :[]);
         }catch(err){
             if(err.name !== "AbortError"){
@@ -65,11 +67,11 @@ export default function AutoCompletarCliente({onSelect}){
     const seleccionarCliente = (cliente) =>{
         setTexto(cliente.nombre);
         setClientes([]);
+        setSeleccionado(true);
         onSelect(cliente);
     };
 
     useEffect(() => {
-        console.log("React funcionando");
         const handleClickOutside = (e) => {
             if (ref.current && !ref.current.contains(e.target)) {
                 setClientes([]);
@@ -84,16 +86,17 @@ export default function AutoCompletarCliente({onSelect}){
         <div 
             ref={ref} 
             style={{ position: "relative" }} 
-            className="autocompletardeudores">
+            >
                 <input
                     type="text"
                     value={texto}
                     onChange={(e) =>{
-                        console.log("INPUT:", e.target.value);
                         setTexto(e.target.value);
+                        setSeleccionado(false);
                         onSelect(null);
                     }}
                     placeholder="Escriba el nombre del cliente..."
+                    
                 />
 
             {loading && <div>Cargando...</div>}
@@ -111,6 +114,7 @@ export default function AutoCompletarCliente({onSelect}){
                         maxHeight: "200px",
                         overflowY: "auto",
                     }}
+                    className="autocompletardeudores"
                 >
                     
                 {clientes.map((c) => (

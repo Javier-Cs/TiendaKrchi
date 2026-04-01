@@ -15,7 +15,7 @@ import VentaProductoSaleTable from '../components/PortalStore/Tablas/VentaProduc
 import VentasPorFechaForm from '../components/PortalStore/Formularios/VentasPorFechaForm.astro';
 
 
-import VentasPorFechaIsland from '../components/PortalStore/Formularios/VentasPorFechaIsland';
+import VentasPorFechaIsland from '../components/PortalStore/Formularios/Busqueda_por_fecha/ventasPorFechaIsland.tsx';
 
 //importacion de tipos
 import type{ ClienteDto } from '@/types/cliente';
@@ -31,7 +31,7 @@ import { render } from 'astro:content';
 const columnasVentas: Column<VentaDto>[] = [
   { label: 'ID Venta', field: 'id_venta' },
   { label: 'ID Cliente', field: 'id_cliente' },
-  {label: 'Nombre Cliente', field:'nombre_cliente'},
+  {label: 'Nombre Cliente', field:'nombre'},
   { label: 'Vendedor', field: 'nombre_vendedor' },
   { label: 'Tipo', field: 'tipo_venta' },
   { label: 'Estado', field: 'estado_venta' },
@@ -43,9 +43,9 @@ const columnasVentas: Column<VentaDto>[] = [
   },
   {
     label: 'Total',
-    field: 'monto_total_venta',
+    field: 'monto_total_Venta',
     // uso de uno de los metodos format
-    render: (v) => formatoDeDinero(v.monto_total_venta)
+    render: (v) => formatoDeDinero(v.monto_total_Venta)
   }
 ];
 
@@ -72,7 +72,7 @@ const columnasDeudas: Column<VentaDto>[] = [
   //{ label: 'Selec T.', field: 'id_venta' },
   { label: 'ID Venta', field: 'id_venta' },
   { label: 'ID Cliente', field: 'id_cliente' },
-  {label: 'Nombre Cliente', field:'nombre_cliente'},
+  {label: 'Nombre Cliente', field:'nombre'},
   { label: 'Vendedor', field: 'nombre_vendedor' },
   { label: 'Tipo', field: 'tipo_venta' },
   { label: 'Estado', field: 'estado_venta' },
@@ -84,9 +84,9 @@ const columnasDeudas: Column<VentaDto>[] = [
   },
   {
     label: 'Total',
-    field: 'monto_total_venta',
+    field: 'monto_total_Venta',
     // uso de uno de los metodos format
-    render: (v) => formatoDeDinero(v.monto_total_venta)
+    render: (v) => formatoDeDinero(v.monto_total_Venta)
   }
 ];
 
@@ -114,9 +114,9 @@ const columnasFechaVentas: Column<VentaDto>[] = [
   },
   {
     label: 'Total',
-    field: 'monto_total_venta',
+    field: 'monto_total_Venta',
     // uso de uno de los metodos format
-    render: (v) => formatoDeDinero(v.monto_total_venta)
+    render: (v) => formatoDeDinero(v.monto_total_Venta)
   }
 ];
 ---
@@ -334,6 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
       tr.innerHTML = `
         <td>${v.id_venta}</td>
         <td>${v.id_cliente}</td>
+        <td>${v.nombre}</td>
         <td>${v.nombre_vendedor}</td>
         <td>${v.tipo_venta}</td>
         <td>${v.estado_venta}</td>
@@ -435,6 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </td>
       <td>${d.id_venta}</td>
       <td>${d.id_cliente}</td>
+      <td>${d.nombre}</td>
       <td>${d.nombre_vendedor}</td>
       <td>${d.tipo_venta}</td>
       <td>${d.estado_venta}</td>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import AutoCompletarCliente from "./AutoCompletarCliente"
+import AutoCompletarCliente from "../../tools/AutoCompletarCliente"
 
 export default function FormularioVentaPorFecha({onBuscar}){
     const [fecha, setFecha] = useState("");
