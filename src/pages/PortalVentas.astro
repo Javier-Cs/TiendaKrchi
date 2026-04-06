@@ -139,6 +139,7 @@ const columnasFechaVentas: Column<VentaDto>[] = [
 
 			<section>
 
+        {/*AQUI ESTAMOS  TRABAJANDO */}
         <!--formulario de realizar venta total -->
 				<div data-tab="vender" class="tab-panel active">
 					<SalesForm/>
@@ -229,9 +230,6 @@ const columnasFechaVentas: Column<VentaDto>[] = [
 
 
 <script>
-
-
-
   {/*implementacion de modal venta */}
 document.addEventListener('click', async (e) => {
   const row = e.target.closest('.selectable-row');
@@ -244,8 +242,6 @@ document.addEventListener('click', async (e) => {
 
   abrirModalVenta(idVenta);
 });
-
-
 
 {/* implementacion de modal cliente */}
 async function abrirModalVenta(idVenta) {
@@ -280,11 +276,9 @@ async function abrirModalVenta(idVenta) {
  
 }
 
-
 function cerrarModalVenta() {
   document.getElementById('modalVenta').style.display = 'none';
 }
-
 document.getElementById('btnCerrarModal')
   .addEventListener('click', cerrarModalVenta);
 
@@ -293,11 +287,6 @@ document.getElementById('btnCerrarModal')
 }*/
 /*document.getElementById('btnGuardarCambioVenta')
   .addEventListener('click', validarCambiosVenta);*/
-
-
-  {/* modal cliente */}
-
- 
 
   document.addEventListener('click', async (e) => {
   const row = e.target.closest('.selectable-row');

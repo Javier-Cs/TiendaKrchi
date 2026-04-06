@@ -3,7 +3,7 @@
 
     <header class="modal-header">
       <h3>Ventana de Editar venta temporal</h3>
-      <button id="btnCerrarModal" class="close-btn">✕</button>
+      <button id="btnCerrarVenta" class="close-btn">✕</button>
     </header>
 
 
@@ -240,63 +240,163 @@ button {
 }
 
 </style>
+
 <script>
+  const modal = document.getElementById('modalVenta');
 
-  const descripcion = document.getElementById('modalDescripcion') as HTMLTextAreaElement
-  const tipoVenta = document.getElementById('modalTipo') as HTMLSelectElement
-  const totalValorV = document.getElementById('modalTotal') as HTMLInputElement
-  const efectivoRecibido = document.getElementById('modalEfectivo') as HTMLInputElement
-  //let idventa = document.getElementById('modalIdVenta')
-  const modalIdVenta = document.getElementById('modalIdVenta') as HTMLSpanElement
-  const Actulizarventa = document.getElementById('btnGuardarCambioVenta') as HTMLButtonElement
-  
+  if(modal && modal.dataset.bound !== 'true') {
+    modal.dataset.bound = 'true';
+
+    //referencis internas//
+    const $ = (selector) => modal.querySelector(selector);
+
+    //campos de modal //
+    const descripcion = $('#modalDescripcion');
+    const tipoventa = $('#modalTipo');
+    const totalValorV = $('#modalTotal');
+    const efectivoRecibido = $('#modalEfectivo');
+    const vueltoEntregado = $('#modalVuelto');
+    const idVentaEl = $('#modalIdVenta');
+
+    // cliente
+    const cliId = $('#modalCliId');
+    const cliNombre = $('#modalClienteNombre');
+    const cliCorreo = $('#modalClienteCorreo');
+    const vendedor = $('#modalVendedor');
+    const estado = $('#modalEstado');
+    const fecha = $('#modalFecha');
+
+    //botones del modal
+    const btnGuardar = $('#btnGuardarCambioVenta');
+    const btnCerrar = $('#btnCerrarVenta');
+    const btnLimpiar = $('#btnEliminarVenta');
+
+    let currentVentaId = null;
+
+    //Cerrar modal
+    btnCerrar?.addEventListener('click', cerrar);
+
+    //limpiar modal
+    btnLimpiar?.addEventListener('click', limpiar);
+
+    //Guardar modal - emite el evento
+    btnGuardar?.addEventListener('click',(e) => {
+      e.preventDefault();
+
+      const id = idVentaEl.dataset.id;
+
+      if(!id){
+        alert('ID de venta no encontrado');
+        return;
+      }
+
+      const total = Number(totalValorV.value) || 0;
+      const efectivo = Number(efectivoRecibido.value) || 0;
+
+      if(efectivo < total){
+        alert('Efectivo insuficiente.');
+        return;
+      }
+
+      //validacionde UI //
+      const data = {
+        id_venta: id,
+        descripcion_venta: descripcion.value,
+        tipo_venta: tipoventa.value,
+        monto_total_Venta: total,
+        efectivo_recibido: efectivo
+      };
+
+      modal.dispatchEvent(new CustomEvent('venta:save', {
+        detail:data,
+        bubbles: true
+      }));
+    });
+
+    // UX cerrar con ESC
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && modal.style.display === 'flex'){
+        cerrar();
+      }
+    });
+
+    // UX cerrar clic fuera
+    modal.addEventListener('click', (e) => {
+      if(e.target ===modal) cerrar();
+    });
 
 
-  Actulizarventa.addEventListener('click', async (e) =>{
-    e.preventDefault();
 
-    const idventa = modalIdVenta.dataset.id;
-    if (!idventa) {
-      alert('ID de venta no encontrado');
-      return;
+    //funciones internas//
+    function cerrar(){
+      modal.style.display = 'none';
     }
-    const payload = {
-      descripcion_venta: descripcion.value,
-      tipo_venta: tipoVenta.value,
-      efectivo_recibido: Number(efectivoRecibido.value),
-      monto_total_Venta: Number(totalValorV.value)
+
+    function limpiar(){
+      descripcion.value = '';
+      tipoventa.value = 'CONTADO';
+      totalValorV.value = '';
+      efectivoRecibido.value = '';
+      vueltoEntregado.value = '';
+
+      idVentaEl.dataset.id = '';
+      idVentaEl.textContent = '';
+
+      cliId.textContent = '';
+      cliNombre.textContent = '';
+      cliCorreo.textContent = '';
+
+      vendedor.textContent = '';
+      estado.textContent = '';
+      fecha.textContent = '';
     };
 
-    if(payload.efectivo_recibido < payload.monto_total_Venta){
-      alert('Efectivo insuficiente');
-      return;
+    function calcularVuelto(){
+      const total = Number(totalValorV.value) || 0;
+      const efectivo = Number(efectivoRecibido.value) || 0;
+      vueltoEntregado.value = (efectivo - total).toFixed(2);
     }
 
-    try {
-      const res = await fetch(
-        //'https://localhost:44313/Api/Venta?ventaId=59',
-        `https://apioper.legumfrutsa.com/Api/Venta?ventaId=${idventa}`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }
-      );
+    totalValorV.addEventListener('input', calcularVuelto);
+    efectivoRecibido.addEventListener('input', calcularVuelto);
 
-      if (!res.ok) {
-        const error = await res.text();
-        throw new Error(error);
-      }
-      alert('Venta actualizada correctamente');
-      cerrarModalVenta();
+    window.modalVenta = {
+      abrir(data){
 
-    } catch (error) {
-      console.error(error);
-      alert('Error al actualizar la venta');
-    }
-  
-  });
-  function cerrarModalVenta() {
-    document.getElementById('modalVenta').style.display = 'none';
+        currentVentaId = data.id_venta;
+        limpiar();
+
+        cliNombre.textContent = 'Cargando...';
+
+        descripcion.value = data.descripcion_venta;
+        tipoventa.value = data.tipo_venta;
+        totalValorV.value = data.monto_total_Venta;
+        efectivoRecibido.value = data.efectivo_recibido;
+
+        calcularVuelto();
+
+        idVentaEl.dataset.id = data.id_venta;
+        idVentaEl.textContent = data.id_venta;
+
+        //otros campos de info //
+        vendedor.textContent = data.nombre_vendedor;
+        estado.textContent = data.estado_venta;
+        fecha.textContent = 
+          new Date(data.fecha_venta).toLocaleString('es-EC');
+
+        modal.style.display = 'flex';
+      },
+
+      setClienteInfo(cliente){
+        if(String(currentVentaId) !== String(idVentaEl.dataset.id)) return;
+        cliId.textContent = cliente.id_cliente;
+        cliNombre.textContent = cliente.nombre;
+        cliCorreo.textContent = cliente.email;
+      },
+
+      cerrar
+    };
   }
 </script>
+
+
