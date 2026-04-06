@@ -1,4 +1,5 @@
 ---
+{/*interfas de construccion de columnas */}
 interface Column<T = any> {
   label: string;
   field?: keyof T;
@@ -12,6 +13,9 @@ interface Props<T = any> {
   selectable?: boolean;
   entity?: string;
 }
+
+
+
 
 const {
   columns = [],
@@ -67,25 +71,37 @@ const {
 </div>
 
 <script>
-  const script = document.currentScript;
-  const table = script && script.closest('.table-wrapper');
+ 
+  const table = document.currentScript?.closest('.table-wrapper');
 
-  if (!table) return;
+  if(table && !table.dataset.bound){
 
-  table.addEventListener('click', (e) => {
-    if (e.target.closest('input, button, a, [data-ignore-row-click]')) return;
+    if(table.dataset.bound === 'true') return;
+    table.dataset.bound = 'true';
 
-    const row = e.target.closest('.selectable-row');
-    if (!row) return;
+    table.addEventListener('click', (e) => {
+      if (e.target.closest('input, button, a, [data-ignore-row-click]')) return;
 
-    const id = row.dataset.id;
-    if (!id) return;
+      {/* identifica la fila seleccionada */}
+      const row = e.target.closest('.selectable-row');
+      if (!row) return;
 
-    const entity = table.dataset.entity || null;
+      {/* se obtiene el identificador  */}
+      const id = row.dataset.id;
+      if (!id) return;
+      const entity = table.dataset.entity;
 
-    row.dispatchEvent(new CustomEvent('row:selected', {
-      detail: { id, entity },
-      bubbles: true
-    }));
-  });
+      {/*si no se obtiene la entidad */}
+      if(!entity){
+        console.warn('No se ha definido la entidad para esta tabla');
+      }
+
+      {/* dispatch event */}
+      row.dispatchEvent(new CustomEvent('row:selected', {
+        detail: { id, entity },
+        bubbles: true
+      }));
+    });
+  }
+
 </script>
