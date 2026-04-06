@@ -6,11 +6,12 @@ import ClienteForm from '../components/PortalStore/Formularios/ClienteForm.astro
 import PagosView from '../components/PortalStore/Formularios/PagosViewForm.astro';
 import Layout from '../layouts/Layout.astro';
 import Tabs from '../components/PortalStore/Tabs.astro';
-import ModalFlotante from '../components/Flotantes/ModalFlotante.astro';
+import ModalFlotante from '../components/Flotantes/ModalFlotanteVenta.astro';
 import VentaProductos from '../components/PortalStore/Formularios/VentaProductosForm.astro';
 import "../styles/main.css";
 import VentasTableClient from '../components/PortalStore/Tablas/VentasClientTable.astro';
 import PanelPagoventa from '../components/PortalStore/Paneles/PagoVentProducPanel.astro';
+import PanelActualizarCliente from '../components/Flotantes/ModalFlotanteCliente.astro';
 import VentaProductoSaleTable from '../components/PortalStore/Tablas/VentaProductosTable.astro';
 import VentasPorFechaForm from '../components/PortalStore/Formularios/VentasPorFechaForm.astro';
 
@@ -156,6 +157,7 @@ const columnasFechaVentas: Column<VentaDto>[] = [
 				<div data-tab="cliente" class="tab-panel">
 					<ClienteForm/>
 					<div>
+            <PanelActualizarCliente/>
 						<SalesTable
 							columns={columnasClientes}
   							rows={[]}
@@ -227,9 +229,15 @@ const columnasFechaVentas: Column<VentaDto>[] = [
 
 
 <script>
+
+
+
+  {/*implementacion de modal venta */}
 document.addEventListener('click', async (e) => {
   const row = e.target.closest('.selectable-row');
   if (!row) return;
+
+  {/* aquiiiii */}
 
   const idVenta = row.dataset.id;
   if (!idVenta) return;
@@ -237,14 +245,12 @@ document.addEventListener('click', async (e) => {
   abrirModalVenta(idVenta);
 });
 
+
+
+{/* implementacion de modal cliente */}
 async function abrirModalVenta(idVenta) {
   const res = await fetch(`https://apioper.legumfrutsa.com/Api/Venta/${idVenta}`);
   const v = await res.json();
-
-
-  //document.getElementById('modalIdVenta').value = v.id_venta;
-  //document.getElementById('modalCliente').value = v.id_cliente;
-
 
   document.getElementById('modalDescripcion').value = v.descripcion_venta;
   document.getElementById('modalTipo').value = v.tipo_venta;
@@ -274,27 +280,34 @@ async function abrirModalVenta(idVenta) {
  
 }
 
+
 function cerrarModalVenta() {
   document.getElementById('modalVenta').style.display = 'none';
 }
 
-/*function validarCambiosVenta() {
-  const cambiarVenta = document.getElementById('btnGuardarCambioVenta')
-}*/
-
-
-
 document.getElementById('btnCerrarModal')
   .addEventListener('click', cerrarModalVenta);
 
+/*function validarCambiosVenta() {
+  const cambiarVenta = document.getElementById('btnGuardarCambioVenta')
+}*/
 /*document.getElementById('btnGuardarCambioVenta')
   .addEventListener('click', validarCambiosVenta);*/
 
 
+  {/* modal cliente */}
+
+ 
+
+  document.addEventListener('click', async (e) => {
+  const row = e.target.closest('.selectable-row');
+  if (!row) return;
+  });
 
 
+
+  
 document.addEventListener('DOMContentLoaded', () => {
-
   function actualizarHora() {
     const ahora = new Date();
     const hora = ahora.toLocaleTimeString('es-MX', {
