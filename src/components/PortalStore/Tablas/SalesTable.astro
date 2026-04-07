@@ -38,7 +38,10 @@ const {
     <tbody data-role="table-body">
       {Array.isArray(rows) && rows.length > 0 ? (
         rows.map(row => (
-          <tr class="table-row selectable-row" data-id={row[keyField]}>
+          <tr 
+            class="table-row selectable-row" 
+            data-id={row[keyField]}
+            tabindex="0">
             {selectable && (
               <td>
                 <input type="checkbox" value={row[keyField]}/>
@@ -60,6 +63,17 @@ const {
     </tbody>
   </table>
 </div>
+
+<style>
+  .selectable-row {
+    cursor: pointer;
+  }
+
+  .selectable-row:hover {
+    background-color: #f3f4f6;
+  }
+  
+</style>
 
 <script>
 
