@@ -10,6 +10,7 @@ interface Props<T = any> {
   rows: T[];
   keyField?: keyof T;
   selectable?: boolean;
+  entity?: string;
 }
 
 const {
@@ -20,7 +21,7 @@ const {
 } = Astro.props as Props;
 ---
 
-<div class="table-wrapper">
+<div class="table-wrapper" data-entity={Astro.props.entity}>
   <table>
     <thead>
       <tr>
@@ -39,7 +40,7 @@ const {
       {Array.isArray(rows) && rows.length > 0 ? (
         rows.map(row => (
           <tr
-            class="table-row selectable-row"
+            class={`table-row ${selectable ? 'selectable-row' : ''}`}
             data-id={row[keyField]}
           >
             {selectable && (
@@ -75,3 +76,29 @@ const {
     </tbody>
   </table>
 </div>
+
+<script>
+  if (!window.__tablaBound) {
+    window.__tablaBound = true;
+
+    document.addEventListener('click', (e) => {
+      const row = e.target.closest('.selectable-row');
+      if (!row) return;
+
+      const table = row.closest('.table-wrapper');
+      if (!table) return;
+
+      const entity = table.dataset.entity;
+      const id = row.dataset.id;
+
+      if (!id || !entity) return;
+
+      document.dispatchEvent(new CustomEvent('row:selected', {
+        detail: {
+          id: Number(id),
+          entity
+        }
+      }));
+    });
+  }
+</script>

@@ -147,8 +147,9 @@ const columnasFechaVentas: Column<VentaDto>[] = [
             <ModalFlotante/>
 						<SalesTable
 							columns={columnasVentas}
-  							rows={[]}
-  							keyField="id_venta"
+  						rows={[]}
+  						keyField="id_venta"
+              entity="venta"
 						/>
 					</div>
 				</div>
@@ -163,6 +164,7 @@ const columnasFechaVentas: Column<VentaDto>[] = [
 							columns={columnasClientes}
   							rows={[]}
   							keyField="id_cliente"
+                entity="cliente"
 						/>
 					</div>
 				</div >
@@ -235,18 +237,16 @@ const columnasFechaVentas: Column<VentaDto>[] = [
     obtenerCliente,
     actualizarVenta
   } from '../services/ServiciosVentas.ts';
-
-
-
+  
 
   // implementacion de modal venta 
   document.addEventListener('row:selected', async (e) => {
     const {id, entity } = e.detail;
+    if(entity === 'venta'){
+      await manejarSeleccionVenta(id);
+    }
 
-    if(entity !== 'venta') return;
-
-    await manejarSeleccionVenta(id);
-
+    
   });
 
 
@@ -263,7 +263,6 @@ const columnasFechaVentas: Column<VentaDto>[] = [
       console.error(error);
       alert('Error al cargar venta');
     }
-
   }
 
 
@@ -271,12 +270,13 @@ const columnasFechaVentas: Column<VentaDto>[] = [
     const data = e.detail;
 
     try{
-      await actualizarVenta(data);
+      const ventaActualizada = await actualizarVenta(data);
 
       alert('Venta Actualizada.')
       window.modalVenta.cerrar();
+      location.reload();
 
-      console.log('Actualizar tabla aquí');
+      console.log('vcentas actualizadas en memoria', ventas);
     }catch(error){
       console.error(error);
       alert('Error al actualizar');
@@ -284,77 +284,6 @@ const columnasFechaVentas: Column<VentaDto>[] = [
   });
 
 
-
-
-
-
-
-
-
-
-
-/*document.addEventListener('click', async (e) => {
-  const row = e.target.closest('.selectable-row');
-  if (!row) return;
-
-  {/* aquiiiii *}/
-
-  const idVenta = row.dataset.id;
-  if (!idVenta) return;
-
-  abrirModalVenta(idVenta);
-});*/
-
-/* implementacion de modal cliente */
-/*async function abrirModalVenta(idVenta) {
-  const res = await fetch(`https://apioper.legumfrutsa.com/Api/Venta/${idVenta}`);
-  const v = await res.json();
-
-  document.getElementById('modalDescripcion').value = v.descripcion_venta;
-  document.getElementById('modalTipo').value = v.tipo_venta;
-  document.getElementById('modalTotal').value = v.monto_total_Venta;
-  document.getElementById('modalEfectivo').value = v.efectivo_recibido;
-
-  modalVuelto.value = v.monto_vuelto;
-  
-   // para referencia interna
-  modalIdVenta.textContent = v.id_venta;
-  
-  modalVendedor.textContent = v.nombre_vendedor;
-  modalEstado.textContent = v.estado_venta;
-  modalFecha.textContent = new Date(v.fecha_venta).toLocaleString('es-EC');
-  
-  modalIdVenta.dataset.id = v.id_venta;
-
-  const restcli = await fetch(`https://apioper.legumfrutsa.com/Api/Cliente/${v.id_cliente}`);
-  const cli = await restcli.json();
-  modalClienteNombre.textContent= cli.nombre; // luego puedes cambiar a nombre
-  modalClienteCorreo.textContent = cli.email;
-  modalCliId.textContent = cli.id_cliente;
-
-  
-  modalVenta.style.display = 'flex';  
-
- 
-}*/
-
-/*
-function cerrarModalVenta() {
-  document.getElementById('modalVenta').style.display = 'none';
-}
-document.getElementById('btnCerrarModal')
-  .addEventListener('click', cerrarModalVenta);
-
-/*function validarCambiosVenta() {
-  const cambiarVenta = document.getElementById('btnGuardarCambioVenta')
-}*/
-/*document.getElementById('btnGuardarCambioVenta')
-  .addEventListener('click', validarCambiosVenta);*/
-
-  /*document.addEventListener('click', async (e) => {
-  const row = e.target.closest('.selectable-row');
-  if (!row) return;
-  });*/
 
 
 
