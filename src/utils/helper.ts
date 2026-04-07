@@ -1,4 +1,4 @@
-export async function apiFetch(url: string, options?: RequestInit){
+export async function apiFetch<T>(url: string, options?: RequestInit): Promise<T>{
     const rest = await fetch(url, options);
     if(!rest.ok){
         const msg = await rest.text();
