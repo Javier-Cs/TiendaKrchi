@@ -1,31 +1,30 @@
 ---
-{/*interfas de construccion de columnas */}
 interface Column<T = any> {
   label: string;
-  field?: keyof T;
-  render?: (row: T) => string | number;
+  field: keyof T;
 }
 
-interface Props<T = any> {
+interface Props<T = any>{
   columns: Column<T>[];
   rows: T[];
   keyField?: keyof T;
-  selectable?: boolean;
+  selectable?:boolean;
   entity?: string;
 }
-
-
-
 
 const {
   columns = [],
   rows = [],
   keyField = 'id',
-  selectable = false
+  selectable = false,
+  entity
 } = Astro.props as Props;
 ---
 
-<div class="table-wrapper" data-entity ={Astro.props.entity}>
+<div 
+  class="table-wrapper" 
+  data-entity ={entity}
+  >
   <table>
     <thead>
       <tr>
@@ -36,72 +35,62 @@ const {
       </tr>
     </thead>
 
-    <tbody>
-  {Array.isArray(rows) && rows.length > 0 ? (
-    rows.map(row => (
-      <tr class="table-row selectable-row"
-          data-id={row[keyField]}>
-            
-        {selectable && (
-          <td>
-            <input type="checkbox" value={row[keyField]} />
+    <tbody data-role="table-body">
+      {Array.isArray(rows) && rows.length > 0 ? (
+        rows.map(row => (
+          <tr class="table-row selectable-row" data-id={row[keyField]}>
+            {selectable && (
+              <td>
+                <input type="checkbox" value={row[keyField]}/>
+              </td>
+            )}
+            {columns.map(col => (
+              <td>{row[col.field] ?? ''}</td>
+            ))}
+          </tr>
+        ))
+      ):(
+        <tr>
+          <td colspan={columns.length + (selectable ? 1 : 0)}>
+            SIN REGISTROS...
           </td>
-        )}
+        </tr>
+      )}
 
-        {columns.map(col => (
-          <td>
-            {col.render
-              ? col.render(row)
-              : col.field
-              ? row[col.field]
-              : ''}
-          </td>
-        ))}
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td colspan={columns.length + (selectable ? 1 : 0)}>
-        Sin datos
-      </td>
-    </tr>
-  )}
-</tbody>
+    </tbody>
   </table>
 </div>
 
 <script>
- 
+
   const table = document.currentScript?.closest('.table-wrapper');
 
-  if(table && !table.dataset.bound){
+  if(!table || table.dataset.bound === 'true') return;
 
-    if(table.dataset.bound === 'true') return;
-    table.dataset.bound = 'true';
+  table.dataset.bound = 'true';
 
-    table.addEventListener('click', (e) => {
-      if (e.target.closest('input, button, a, [data-ignore-row-click]')) return;
+  table.addEventListener('click', (e) => {
+    if(e.target.closest('input, button, a, [data-ignore-row-click]')) return;
 
-      {/* identifica la fila seleccionada */}
-      const row = e.target.closest('.selectable-row');
-      if (!row) return;
+    const row = e.target.closest('.selectable-row');
+    if (!row) return;
 
-      {/* se obtiene el identificador  */}
-      const id = row.dataset.id;
-      if (!id) return;
-      const entity = table.dataset.entity;
+    const id = row.dataset.id;
+    if (!id) return;
 
-      {/*si no se obtiene la entidad */}
-      if(!entity){
-        console.warn('No se ha definido la entidad para esta tabla');
-      }
+    const entity = table.dataset.entity;
 
-      {/* dispatch event */}
-      row.dispatchEvent(new CustomEvent('row:selected', {
-        detail: { id, entity },
-        bubbles: true
-      }));
-    });
-  }
+    if (!entity) {
+      console.warn('Tabla sin entity definida');
+    }
 
+    row.dispatchEvent(new CustomEvent('row:selected', {
+      detail: { id, entity },
+      bubbles: true
+    }));
+
+    
+  });
+ 
+ 
 </script>

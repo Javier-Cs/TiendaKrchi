@@ -230,21 +230,83 @@ const columnasFechaVentas: Column<VentaDto>[] = [
 
 
 <script>
-  {/*implementacion de modal venta */}
-document.addEventListener('click', async (e) => {
+  import {
+    obtenerVenta,
+    obtenerCliente,
+    actualizarVenta
+  } from '../services/ServiciosVentas.ts';
+
+
+
+
+  // implementacion de modal venta 
+  document.addEventListener('row:selected', async (e) => {
+    const {id, entity } = e.detail;
+
+    if(entity !== 'venta') return;
+
+    await manejarSeleccionVenta(id);
+
+  });
+
+
+  async function manejarSeleccionVenta(idVenta){
+    try {
+      const venta = await obtenerVenta(idVenta);
+
+      // abrir modal con datos de venta
+      window.modalVenta.abrir(venta);
+
+      const cliente = await obtenerCliente(venta.id_cliente)
+      window.modalVenta.setClienteInfo(cliente);
+    }catch(error){
+      console.error(error);
+      alert('Error al cargar venta');
+    }
+
+  }
+
+
+  document.addEventListener('venta:save', async (e) =>{
+    const data = e.detail;
+
+    try{
+      await actualizarVenta(data);
+
+      alert('Venta Actualizada.')
+      window.modalVenta.cerrar();
+
+      console.log('Actualizar tabla aquí');
+    }catch(error){
+      console.error(error);
+      alert('Error al actualizar');
+    }
+  });
+
+
+
+
+
+
+
+
+
+
+
+/*document.addEventListener('click', async (e) => {
   const row = e.target.closest('.selectable-row');
   if (!row) return;
 
-  {/* aquiiiii */}
+  {/* aquiiiii *}/
 
   const idVenta = row.dataset.id;
   if (!idVenta) return;
 
   abrirModalVenta(idVenta);
-});
+});*/
 
-{/* implementacion de modal cliente */}
-async function abrirModalVenta(idVenta) {
+/* implementacion de modal cliente */
+/*async function abrirModalVenta(idVenta) {
   const res = await fetch(`https://apioper.legumfrutsa.com/Api/Venta/${idVenta}`);
   const v = await res.json();
 
@@ -274,8 +336,9 @@ async function abrirModalVenta(idVenta) {
   modalVenta.style.display = 'flex';  
 
  
-}
+}*/
 
+/*
 function cerrarModalVenta() {
   document.getElementById('modalVenta').style.display = 'none';
 }
@@ -288,10 +351,10 @@ document.getElementById('btnCerrarModal')
 /*document.getElementById('btnGuardarCambioVenta')
   .addEventListener('click', validarCambiosVenta);*/
 
-  document.addEventListener('click', async (e) => {
+  /*document.addEventListener('click', async (e) => {
   const row = e.target.closest('.selectable-row');
   if (!row) return;
-  });
+  });*/
 
 
 
