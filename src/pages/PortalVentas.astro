@@ -6,12 +6,12 @@ import ClienteForm from '../components/PortalStore/Formularios/ClienteForm.astro
 import PagosView from '../components/PortalStore/Formularios/PagosViewForm.astro';
 import Layout from '../layouts/Layout.astro';
 import Tabs from '../components/PortalStore/Tabs.astro';
-import ModalFlotante from '../components/Flotantes/ModalFlotanteVenta.astro';
+import ModalFlotanteVenta from '../components/Flotantes/ModalFlotanteVenta.astro';
 import VentaProductos from '../components/PortalStore/Formularios/VentaProductosForm.astro';
 import "../styles/main.css";
 import VentasTableClient from '../components/PortalStore/Tablas/VentasClientTable.astro';
 import PanelPagoventa from '../components/PortalStore/Paneles/PagoVentProducPanel.astro';
-import PanelActualizarCliente from '../components/Flotantes/ModalFlotanteCliente.astro';
+import ModalFlotanteCliente from '../components/Flotantes/ModalFlotanteCliente.astro';
 import VentaProductoSaleTable from '../components/PortalStore/Tablas/VentaProductosTable.astro';
 import VentasPorFechaForm from '../components/PortalStore/Formularios/VentasPorFechaForm.astro';
 
@@ -139,12 +139,12 @@ const columnasFechaVentas: Column<VentaDto>[] = [
 
 			<section>
 
-        {/*AQUI ESTAMOS  TRABAJANDO */}
         <!--formulario de realizar venta total -->
 				<div data-tab="vender" class="tab-panel active">
 					<SalesForm/>
 					<div>
-            <ModalFlotante/>
+            <!--modal de actualizar venta -->
+            <ModalFlotanteVenta/>
 						<SalesTable
 							columns={columnasVentas}
   						rows={[]}
@@ -159,7 +159,9 @@ const columnasFechaVentas: Column<VentaDto>[] = [
 				<div data-tab="cliente" class="tab-panel">
 					<ClienteForm/>
 					<div>
-            <PanelActualizarCliente/>
+            <!--modal de actualizar cliente -->
+            <!--EN EL QUE ESTAMOS TRABAJANDO AHORA Y NO SE PRESENTA CUANDO HACEMOS CLIC EN UN REGISTRO -->
+            <ModalFlotanteCliente/>
 						<SalesTable
 							columns={columnasClientes}
   							rows={[]}
@@ -230,23 +232,27 @@ const columnasFechaVentas: Column<VentaDto>[] = [
 	</main>
 </Layout>
 
-
+<!-- -->
 <script>
   import {
     obtenerVenta,
     obtenerCliente,
-    actualizarVenta
+    actualizarVenta,
+    actualizarCliente
   } from '../services/ServiciosVentas.ts';
   
 
+  // VENTA FUNCIONA
   // implementacion de modal venta 
   document.addEventListener('row:selected', async (e) => {
-    const {id, entity } = e.detail;
-    if(entity === 'venta'){
-      await manejarSeleccionVenta(id);
-    }
+    const { id, entity } = e.detail;
+    console.log('EVENTO', entity, id);
 
-    
+    if (entity === 'venta') {
+      await manejarSeleccionVenta(id);
+    } else if (entity === 'cliente') {
+      await manejarSeleccionCliente(id);
+    }
   });
 
 
@@ -268,7 +274,6 @@ const columnasFechaVentas: Column<VentaDto>[] = [
 
   document.addEventListener('venta:save', async (e) =>{
     const data = e.detail;
-
     try{
       const ventaActualizada = await actualizarVenta(data);
 
@@ -276,12 +281,40 @@ const columnasFechaVentas: Column<VentaDto>[] = [
       window.modalVenta.cerrar();
       location.reload();
 
-      console.log('vcentas actualizadas en memoria', ventas);
+      console.log('ventas actualizadas en memoria', ventas);
     }catch(error){
       console.error(error);
       alert('Error al actualizar');
     }
   });
+
+
+  // CLIENTE AUN NO FUNCIONA Y NO PRESENTA EL MODEL AL SELECCIONAR EL REGISTRO
+  // implementacion de modal CLIENTE 
+  async function manejarSeleccionCliente(idCliente){
+    try{
+      const cliente = await obtenerCliente(idCliente);
+      window.modalCliente.abrir(cliente);
+    } catch(error){
+      console.error(error);
+      alert('Error al cargar el cliente');
+    }
+  }
+
+  document.addEventListener('cliente:save', async (e) =>{
+      const data = e.detail;
+      try{
+        const clienteActualizado = await actualizarCliente(data);
+        alert('Cliente Actualizado');
+
+        window.modalCliente.cerrar();
+        location.reload();
+        console.log('Clientes actualizados en memoria', clientes);
+      }catch(error){
+        console.error(error);
+        alert('Error al actualizar');
+      }
+    });
 
 
 

@@ -11,6 +11,7 @@ interface Props<T = any> {
   keyField?: keyof T;
   selectable?: boolean;
   entity?: string;
+  onRowSelect?: (id: number, entity: string) => void;
 }
 
 const {
@@ -40,8 +41,9 @@ const {
       {Array.isArray(rows) && rows.length > 0 ? (
         rows.map(row => (
           <tr
-            class={`table-row ${selectable ? 'selectable-row' : ''}`}
+            class="table-row"
             data-id={row[keyField]}
+            data-row={JSON.stringify(row)}
           >
             {selectable && (
               <td>
@@ -49,7 +51,6 @@ const {
                   type="checkbox"
                   class="row-checkbox"
                   value={row[keyField]}
-                  data-row={JSON.stringify(row)}
                 />
               </td>
             )}
@@ -78,11 +79,28 @@ const {
 </div>
 
 <script>
+  import {selectedRow, activedModal} from '@/store/uistore';
+
+  function handleRowClick(row) {
+    selectedRow.set({
+      entity: Astro.props.entity,
+      data: row
+    });
+
+    activedModal.set({
+      type: Astro.props.entity
+    });
+  }
+
+  
   if (!window.__tablaBound) {
     window.__tablaBound = true;
 
-    document.addEventListener('click', (e) => {
-      const row = e.target.closest('.selectable-row');
+    /*document.addEventListener('click', (e) => {
+
+      if(e.target.closest('input, button, a, select, textarea')) return;
+ 
+      const row = e.target.closest('.table-row');
       if (!row) return;
 
       const table = row.closest('.table-wrapper');
@@ -93,12 +111,11 @@ const {
 
       if (!id || !entity) return;
 
-      document.dispatchEvent(new CustomEvent('row:selected', {
-        detail: {
-          id: Number(id),
-          entity
-        }
-      }));
-    });
+      // Usar callback en props
+      const props = Astro.props;
+      if (props.onRowSelect) {
+        props.onRowSelect(Number(id), entity);
+      }
+    });*/
   }
 </script>

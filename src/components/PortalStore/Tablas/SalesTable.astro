@@ -79,32 +79,32 @@ const {
 
   const table = document.currentScript?.closest('.table-wrapper');
 
-  if(!table || table.dataset.bound === 'true') return;
+  if(!table || table.dataset.bound === 'true') {
+    table.dataset.bound = 'true';
 
-  table.dataset.bound = 'true';
+    table.addEventListener('click', (e) => {
+      if(e.target.closest('input, button, a, [data-ignore-row-click]')) return;
 
-  table.addEventListener('click', (e) => {
-    if(e.target.closest('input, button, a, [data-ignore-row-click]')) return;
+      const row = e.target.closest('.selectable-row');
+      if (!row) return;
 
-    const row = e.target.closest('.selectable-row');
-    if (!row) return;
+      const id = row.dataset.id;
+      if (!id) return;
 
-    const id = row.dataset.id;
-    if (!id) return;
+      const entity = table.dataset.entity;
 
-    const entity = table.dataset.entity;
+      if (!entity) {
+        console.warn('Tabla sin entity definida');
+      }
 
-    if (!entity) {
-      console.warn('Tabla sin entity definida');
-    }
+      row.dispatchEvent(new CustomEvent('row:selected', {
+        detail: { id, entity },
+        bubbles: true
+      }));
 
-    row.dispatchEvent(new CustomEvent('row:selected', {
-      detail: { id, entity },
-      bubbles: true
-    }));
-
-    
-  });
+      
+    });
+  }
  
  
 </script>

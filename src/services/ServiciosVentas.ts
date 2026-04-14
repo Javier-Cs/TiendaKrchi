@@ -20,6 +20,16 @@ export async function obtenerCliente(id: number): Promise<ClienteDto>{
     return rest.json();*/
 }
 
+export async function actualizarCliente(data: ClienteDto): Promise<ClienteDto>{
+    return apiFetch<ClienteDto>(`${API_BASE}/Api/Cliente/${data.id_cliente}`,
+        {
+            method: 'PUT',
+            headers:{'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        }
+    )
+}
+
 export async function actualizarVenta(data: VentaDto): Promise<VentaDto>{
     return apiFetch<VentaDto>(`${API_BASE}/Api/Venta?ventaId=${data.id_venta}`,
         {

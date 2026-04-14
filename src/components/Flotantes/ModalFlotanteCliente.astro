@@ -7,9 +7,9 @@
 
         <div class="model-body">
             <div class="field field-compact">
-                <span><strong>Id Cliente:</strong><span id="modalActualizarClienteId"></span></span>
-                <span><strong>Fecha creacion:</strong><span id="modalActualizarClienteFecha"></span></span>
-                <span><strong>Correo:</strong><span id="modalActualizarClienteCorreo"></span></span>
+                <span><strong>Id Cliente:</strong><span id="modalClienteId" data-id=""></span></span>
+                <span><strong>Fecha creacion:</strong><span id="modalClienteFecha"></span></span>
+                <span><strong>Correo:</strong><span id="modalClienteCorreo"></span></span>
             </div>
 
             <div class="field">
@@ -25,8 +25,8 @@
             <div class="field">
                 <label>Tipo:</label>
                 <select id="modalActualizarClienteTipo">
-                    <option value="CONTADO">Contado</option>
-                    <option value="CREDITO">Credito</option>
+                    <option value="NORMAL">Normal</option>
+                    <option value="DEUDOR">Deudor</option>
                 </select>
             </div>
 
@@ -226,66 +226,112 @@ button {
 
 
 <script>
-    const nombre = document.getElementById('modalActualizarClienteNombre') as HTMLInputElement
-    const telefono = document.getElementById('modalActualizarClienteTelefono') as HTMLInputElement
-    const tipo = document.getElementById('modalActualizarClienteTipo') as HTMLSelectElement
-    const estado = document.getElementById('modalActualizarClienteEstado') as HTMLSelectElement
 
-    const ActualizarClienteId = document.getElementById('btnGuardaCambiosClientes') as HTMLButtonElement
-    const LimpiarCambiosClienteId = document.getElementById('btnLimpiarCamposClientes') as HTMLButtonElement
-    const modalIdCliente = document.getElementById('modalActualizarClienteId') as HTMLSpanElement
+  const modalCli = document.getElementById('modalCliente');
+  if(modalCli && modalCli.dataset.bound !== 'true'){
+    modalCli.dataset.bound = 'true';
 
+    const $ = (selector) => modalCli.querySelector(selector);
 
+    const nombre = $('#modalActualizarClienteNombre');
+    const telefono = $('#modalActualizarClienteTelefono');
+    const tipo = $('#modalActualizarClienteTipo');
+    const estado = $('#modalActualizarClienteEstado');
 
-    function cerrarModalActCliente(){
-        document.getElementById('modalCliente').style.display = 'none'
-    }
+    const idCliente = $('#modalClienteId');
+    const fechaCreacion = $('#modalClienteFecha');
+    const correoCliente = $('#modalClienteCorreo');
+   
 
+    const btnGuardar = $('#btnGuardaCambiosClientes');
+    const btnCerrar = $('#btnCerrarModalClient');
+    const btnLimpiar = $('#btnLimpiarCamposClientes');
 
-    ActualizarClienteId.addEventListener('click', async (e) =>{
-        e.preventDefault();
+    let currentClienteId = null;
 
-        const idCliente = modalIdCliente.dataset.id;
+    function cerrarModal(){
+      modalCli.style.display= 'none';
+    };
 
-        if(!idCliente){
-            alert('No se pudo obtener el ID del cliente');
-            return;
-        }
+    function limpiarModal(){
+      nombre.value = '';
+      telefono.value = '';
+      tipo.value = 'Normal';
+      estado.value = 'true';
 
-        const payload = {
-            nombre: nombre.value,
-            telefono: telefono.value,
-            tipo: tipo.value,
-            estado: estado.value
-        };
+      idCliente.textContent = '';
+      idCliente.dataset.id = '';
 
-        try{
-            const rest = await fetch(
-                'https://apioper.legumfrutsa.com/Api/Cliente/${idCliente}',
-                {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                }
-            );
+      fechaCreacion.textContent = '';
+      correoCliente.textContent = '';
+    };
 
-            if(!rest.ok){
-                const error = await rest.text();
-                throw new Error(error);
-            }
-            alert('Cliente actualizado correctamente');
-            cerrarModalActCliente();
-        }catch(error){
-            console.error('Error al actualizar cliente:', error);
-            alert('Ocurrió un error al actualizar el cliente');
-        }
+    btnCerrar?.addEventListener('click', cerrarModal);
 
+    btnLimpiar?.addEventListener('click', limpiarModal);
+
+    btnGuardar?.addEventListener('click', (e) =>{
+      e.preventDefault();
+
+      const id = idCliente.dataset.id;
+
+      if(!id){
+        alert('ID de cliente no encontrado');
+        return;
+      }
+
+      const data = {
+        nombre: nombre.value,
+        telefono: telefono.value,
+        tipo: tipo.value,
+        estado: estado.value === 'true'
+      };
+
+      modalCli.dispatchEvent(new CustomEvent('cliente:save',{
+        detail: {
+          id: Number(id),
+          data
+        },
+        bubbles: true
+      }));
     });
 
 
+    document.addEventListener('keydown', (e) =>{
+      if(e.key === 'Escape' && modalCli.style.display === 'flex'){
+        cerrarModal();
+      }
+    });
 
+    modalCli.addEventListener('click', (e) => {
+      if (e.target === modalCli) cerrarModal();
+    });
+
+    window.modalCliente = {
+      abrir(cliente){
+        //
+        limpiarModal();
+
+        currentClienteId = cliente.id_cliente;
+        //idCliente.textContent = 'Cargando...';
+        
+        idCliente.dataset.id = cliente.id_cliente;
+        idCliente.textContent = cliente.id_cliente;
+
+        nombre.value = cliente.nombre;
+        telefono.value = cliente.telefono;
+        tipo.value = cliente.tipo;
+        estado.value = String(cliente.estado);
+
+        fechaCreacion.textContent = cliente.fecha_creacion;
+        correoCliente.textContent = cliente.email;
+
+        modalCli.style.display = 'flex';
+
+      },
+      cerrarModal
+    };
+  }
 </script>
 
 
